@@ -50,11 +50,22 @@ export default function TabLayout () {
           tabBarStyle: { display: 'none' }
         }}
       />
-      
       <Tabs.Screen
         name='OrderPreparing'
         options={{
           title: 'OrderPreparing',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name='paperplane.fill' color={color} />
+          ),
+          headerShown: false,
+          tabBarStyle: { display: 'none' }
+        }}
+      />
+      
+      <Tabs.Screen
+        name='Delivery'
+        options={{
+          title: 'Delivery',
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name='paperplane.fill' color={color} />
           ),
