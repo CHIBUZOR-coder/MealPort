@@ -58,10 +58,10 @@ export default function HomeScreen () {
               </View>
 
               <View
-                className='p-1 slider rounded-full flex justify-center items-center h-10 w-10 '
+                className='p-1 slider rounded-full flex justify-center items-center h-10 w-10 cursor-pointer'
                 style={{ backgroundColor: themeColors.bgColor(1) }}
               >
-                <Icon.Sliders
+                <Icon.User
                   height={'25'}
                   width={'25'}
                   strokeWidth={2.5}

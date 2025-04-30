@@ -5,7 +5,7 @@ import {
   View,
   Text,
   Image,
-  ScrollView,
+  // ScrollView,
   TouchableOpacity,
   Platform,
   FlatList,
@@ -14,6 +14,8 @@ import {
   StatusBar
 } from 'react-native'
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context' // Import from safe-area-context
+import { ScrollView } from 'react-native-virtualized-view'
+
 import * as Icon from 'react-native-feather'
 import { themeColor, themeColors } from '@/theme/index'
 import React, { useEffect, useState } from 'react'
@@ -187,7 +189,6 @@ export default function RestaurantScreen () {
       await AsyncStorage.setItem('storedFood', JSON.stringify(Storedfood))
       console.log('Item removed from cart')
       dispatch(cartActions.addToCart(storedFood))
-
     } else {
       console.log('Item does not exist in the cart')
     }
@@ -293,33 +294,37 @@ export default function RestaurantScreen () {
     <View style={{ flex: 1, backgroundColor: 'white', position: 'relative' }}>
       <StatusBar backgroundColor='black' barStyle='white-content' />
       {/* Notification********************* */}
-      <View
-        className={`fixed   ${
-          toggle ? '' : 'hidden'
-        } top-20 left-0 right-0 p-2 w-full  flex  justify-center items-center bg-transparent z-50 align-middle`}
-        // style={{ zIndex:  }}
-      >
-        <Pressable
-          onPress={() => {
-            HandleToggleFalse()
-            HandleRenderCart()
-          }}
-          style={{ backgroundColor: themeColors.bgColor(1) }}
-          className=' p-2  rounded-3xl w-[80%]  z-50 flex flex-row justify-between items-center'
+
+      {toggle && (
+        <View
+          className={`fixed   ${
+            toggle ? '' : 'hidden'
+          } top-20 left-0 right-0 p-2 w-full  flex  justify-center items-center bg-transparent z-50 align-middle`}
+          // style={{ zIndex:  }}
         >
-          <View className=' rounded-full flex flex-row justify-center items-center h-12 w-12 bg-primary2 '>
-            <Text className=' p-2 text-white  font-semibold '>
-              {(CartCount && CartCount) || 0}
+          <TouchableOpacity
+            onPress={() => {
+              HandleToggleFalse()
+              HandleRenderCart()
+            }}
+            style={{ backgroundColor: themeColors.bgColor(1) }}
+            className=' p-2  rounded-3xl w-[80%]  z-50 flex flex-row justify-between items-center'
+          >
+            <View className=' rounded-full flex flex-row justify-center items-center h-12 w-12 bg-primary2 '>
+              <Text className=' p-2 text-white  font-semibold '>
+                {(CartCount && CartCount) || 0}
+              </Text>
+            </View>
+            <Text className=' p-2 text-white font-semibold flex justify-center items-center'>
+              View Cart
             </Text>
-          </View>
-          <Text className=' p-2 text-white font-semibold flex justify-center items-center'>
-            View Cart
-          </Text>
-          <Text className=' p-2 text-white font-semibold flex justify-center items-center '>
-            ${Total}
-          </Text>
-        </Pressable>
-      </View>
+            <Text className=' p-2 text-white font-semibold flex justify-center items-center '>
+              ${Total}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      )}
+
       {/* Notification Done *************************************************************/}
 
       {/* View cart **********************************************************************/}
@@ -412,7 +417,7 @@ export default function RestaurantScreen () {
                       ${parseFloat(item.price).toFixed(2)}
                     </Text>
 
-                    <Pressable
+                    <TouchableOpacity
                       onPress={() => {
                         HandleDeleteFromAddToCart(item)
                         HandleToggleTrue()
@@ -428,7 +433,7 @@ export default function RestaurantScreen () {
                         strokeWidth={4}
                         stroke='white'
                       />
-                    </Pressable>
+                    </TouchableOpacity>
                   </View>
                 </View>
               )}
@@ -480,7 +485,7 @@ export default function RestaurantScreen () {
             className={`p-2 w-full  flex  justify-center items-center bg-transparent z-50 align-middle mt-4`}
             // style={{ zIndex:  }}
           >
-            <Pressable
+            <TouchableOpacity
               onPress={() => {
                 HandleToggleFalse()
                 router.push({
@@ -502,7 +507,7 @@ export default function RestaurantScreen () {
                   Place Order
                 </Text>
               </View>
-            </Pressable>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -642,7 +647,7 @@ export default function RestaurantScreen () {
 
                         <View className=' flex justify-end  flex-1 items-end '>
                           <View className='flex flex-row justify-center gap-3 items-center '>
-                            <Pressable
+                            <TouchableOpacity
                               onPress={() => {
                                 HandleDeleteFromAddToCart(dish)
                                 HandleToggleTrue()
@@ -658,12 +663,12 @@ export default function RestaurantScreen () {
                                 strokeWidth={4}
                                 stroke='white'
                               />
-                            </Pressable>
+                            </TouchableOpacity>
 
                             <Text className='font-semibold w-5 text-gray-500'>
                               {quantity[dish.id] || 0}
                             </Text>
-                            <Pressable
+                            <TouchableOpacity
                               onPress={() => {
                                 HandleAddToCart(dish, 'add')
                                 HandleToggleTrue()
@@ -679,7 +684,7 @@ export default function RestaurantScreen () {
                                 strokeWidth={4}
                                 stroke='white'
                               />
-                            </Pressable>
+                            </TouchableOpacity>
                           </View>
                         </View>
                       </View>
@@ -764,7 +769,7 @@ export default function RestaurantScreen () {
 
                             <View className=' flex justify-end  flex-1 items-end '>
                               <View className='flex flex-row justify-center gap-3 items-center '>
-                                <Pressable
+                                <TouchableOpacity
                                   onPress={() => {
                                     HandleDeleteFromAddToCart(dish)
                                     HandleToggleTrue()
@@ -780,12 +785,12 @@ export default function RestaurantScreen () {
                                     strokeWidth={4}
                                     stroke='white'
                                   />
-                                </Pressable>
+                                </TouchableOpacity>
 
                                 <Text className='font-semibold w-5 text-center text-gray-500'>
                                   {quantity[dish.id] || 0}
                                 </Text>
-                                <Pressable
+                                <TouchableOpacity
                                   onPress={() => {
                                     HandleAddToCart(dish, 'add')
                                     HandleToggleTrue()
@@ -801,7 +806,7 @@ export default function RestaurantScreen () {
                                     strokeWidth={4}
                                     stroke='white'
                                   />
-                                </Pressable>
+                                </TouchableOpacity>
                               </View>
                             </View>
                           </View>
