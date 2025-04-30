@@ -1,5 +1,5 @@
 import { Platform, Text, View } from 'react-native'
-import MapMobile from './MapMobile'
+
 
 export default function Delivery () {
   return (
