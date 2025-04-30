@@ -21,6 +21,8 @@ import { useFocusEffect } from '@react-navigation/native'
 import { Poppins_400Regular, useFonts } from '@expo-google-fonts/poppins'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useRouter } from 'expo-router'
+import { cartActions } from '@/Redux/slices/cartSlice'
+import { useSelector, useDispatch } from 'react-redux'
 
 export default function RestaurantScreen () {
   const [quantity, setQuantities] = useState({})
@@ -43,6 +45,7 @@ export default function RestaurantScreen () {
   const [Total, setTotal] = useState(null)
   const [toggle, setToggle] = useState(false)
   const [renderCart, setRenderCart] = useState(false)
+  const dispatch = useDispatch()
 
   const [fontsLoaded] = useFonts({
     Poppins_400Regular
@@ -114,6 +117,7 @@ export default function RestaurantScreen () {
 
     setStoredFood(storedFood)
     await AsyncStorage.setItem('storedFood', JSON.stringify(storedFood))
+    dispatch(cartActions.addToCart(storedFood))
   }
 
   const loadQuantities = async () => {
@@ -182,6 +186,8 @@ export default function RestaurantScreen () {
       setStoredFood(Storedfood) // Update storedFood with the modified list
       await AsyncStorage.setItem('storedFood', JSON.stringify(Storedfood))
       console.log('Item removed from cart')
+      dispatch(cartActions.addToCart(storedFood))
+
     } else {
       console.log('Item does not exist in the cart')
     }
