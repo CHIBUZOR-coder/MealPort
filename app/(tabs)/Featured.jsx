@@ -15,8 +15,20 @@ import * as Icon from 'react-native-feather'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Link, useNavigation } from 'expo-router'
 import { useRouter } from 'expo-router'
+import { homeActions } from '@/Redux/slices/HomePageSlice'
+import { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
 const Featured = () => {
+  const dispatch = useDispatch()
+  const showModal = useSelector(state => state.home.showModal)
+
+  console.log('modal', showModal)
+
+  const HandleShowModal = () => {
+    dispatch(homeActions.HandleShowModal())
+  }
+
   // const navigation = useNavigation()
   const { width } = useWindowDimensions() // Get screen width
   const isLargeScreen = width >= 768 // Define "md" breakpoint
@@ -40,7 +52,16 @@ const Featured = () => {
   // const isLargeScreen = width >= 768 // Define "md" breakpoint
   // const numColumns = isLargeScreen ? 3 : 1 // Define number of columns based on screen size
   return (
-    <SafeAreaView className='mt-8' style={{ flex: 1 }}>
+    <SafeAreaView className='mt-8 relative ' style={{ flex: 1 }}>
+      {/* <View
+        style={{
+          width: '100%',
+          height: '100%',
+          backgroundColor: 'yellow',
+          zIndex: 20
+        }}
+        className='w-full absolute top-0 left-0 z-20 '
+      ></View> */}
       <FlatList
         data={featuredDishes}
         ItemSeparatorComponent={() => (
@@ -70,7 +91,15 @@ const Featured = () => {
                     <Text className='font-semibold text-lg'>{item.tittle}</Text>
                   </View>
 
-                  <View className='flex flex-col '>
+                  <Pressable
+                    onPress={() =>
+                      router.push({
+                        pathname: '/SeeAll',
+                        params: { data: JSON.stringify(item.content) }
+                      })
+                    }
+                    className='flex flex-col '
+                  >
                     <Text
                       style={{
                         color: themeColors.bgColor(1),
@@ -80,7 +109,7 @@ const Featured = () => {
                     >
                       See All
                     </Text>
-                  </View>
+                  </Pressable>
                 </View>
 
                 {/* margin */}
@@ -104,7 +133,10 @@ const Featured = () => {
                         onPress={() =>
                           router.push({
                             pathname: '/restaurant',
-                            params: { item: JSON.stringify(subItem), tittle: item.tittle }
+                            params: {
+                              item: JSON.stringify(subItem),
+                              tittle: item.tittle
+                            }
                           })
                         }
                       >
@@ -114,7 +146,7 @@ const Featured = () => {
                               margin: 8,
                               borderRadius: 8
                             },
-                             shadowStyle // Spread the shadowStyle here
+                            shadowStyle // Spread the shadowStyle here
                           ]}
                           className={` flex flex-col bg-white  rounded-lg shadow-lg  `}
                         >

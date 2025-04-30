@@ -21,6 +21,7 @@ import { themeColor, themeColors } from '@/theme/index'
 import Categories from './Categories'
 import Featured from './Featured'
 
+
 export default function HomeScreen () {
   const { width } = useWindowDimensions() // Get screen width
   const isLargeScreen = width >= 768 // Define "md" breakpoint
