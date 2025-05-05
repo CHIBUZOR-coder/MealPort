@@ -41,6 +41,7 @@ export const featuredDishes = [
     id: 1,
     description: "Lorem ipsum dolor sit amet consectetur elit.",
     tittle: "Hot and Spicy",
+    image: require("../assets/featured/spicy/spicy.jpg"),
     content: [
       {
         id: 1,
@@ -894,6 +895,7 @@ export const featuredDishes = [
     id: 2,
     description: "Lorem ipsum dolor sit amet, adipisicing elit.",
     tittle: "Cheesy Delights",
+    image: require("../assets/featured/cheesy/Ajaruli khachapuri.jpg"),
     content: [
       {
         id: 1,
@@ -2511,7 +2513,7 @@ export const featuredDishes = [
   {
     id: 3,
     description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
-
+    image: require("../assets/featured/sweets/sweats.jpg"),
     tittle: "Sweet Treats",
     content: [
       {
@@ -4089,6 +4091,7 @@ export const featuredDishes = [
     id: 4,
     description: "Lorem, adipisicing elit.",
     tittle: "Seafood Specials",
+    image: require("../assets/featured/seafood/anchovies.jpg"),
     content: [
       {
         id: 1,
@@ -4768,6 +4771,7 @@ export const featuredDishes = [
     id: 5,
     description: "Lorem dolor amet consectetur, adipisicing elit.",
     tittle: "Chill Bar",
+    image: require("../assets/featured/drinks/boozy_dole.jpg"),
     content: [
       {
         id: 1,
@@ -6716,6 +6720,7 @@ export const featuredDishes = [
     id: 6,
     description: "Lorem ipsum dolor sit amet consectetur, adipisicing elit.",
     tittle: "Healthy & Fresh",
+    image: require("../assets/featured/healthy/almonds.jpg"),
     content: [
       {
         id: 1,
@@ -7612,6 +7617,7 @@ export const featuredDishes = [
     id: 7,
     description: "Lorem ipsum dolor sit amet consectetur.",
     tittle: "Savory & Crunchy",
+    image: require("../assets/featured/cheesy/Ajaruli khachapuri.jpg"),
     content: [
       {
         id: 1,

@@ -7,8 +7,11 @@ import {
   FlatList,
   ScrollView,
   useWindowDimensions,
-  StatusBar
+  StatusBar,
+  TouchableOpacity
 } from 'react-native'
+
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { HelloWave } from '@/components/HelloWave'
 import ParallaxScrollView from '@/components/ParallaxScrollView'
@@ -21,12 +24,16 @@ import { themeColor, themeColors } from '@/theme/index'
 import Categories from './Categories'
 import Featured from './Featured'
 
+import { resturanActions } from '@/Redux/slices/restaurantSlice'
+import { useEffect } from 'react'
+import { useRouter } from 'expo-router'
 
 export default function HomeScreen () {
   const { width } = useWindowDimensions() // Get screen width
   const isLargeScreen = width >= 768 // Define "md" breakpoint
 
-
+  const router = useRouter()
+  // const restaurants = use
   return (
     <SafeAreaView className=' flex-1' showsVerticalScrollIndicator={false}>
       <StatusBar backgroundColor='black' barStyle='white-content' />
@@ -58,7 +65,12 @@ export default function HomeScreen () {
                 </View>
               </View>
 
-              <View
+              <TouchableOpacity
+                onPress={() =>
+                  router.push({
+                    pathname: '/Login'
+                  })
+                }
                 className='p-1 slider rounded-full flex justify-center items-center h-10 w-10 cursor-pointer'
                 style={{ backgroundColor: themeColors.bgColor(1) }}
               >
@@ -68,7 +80,7 @@ export default function HomeScreen () {
                   strokeWidth={2.5}
                   stroke={'white'}
                 />
-              </View>
+              </TouchableOpacity>
             </View>
 
             <Categories />

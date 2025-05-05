@@ -25,11 +25,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useRouter } from 'expo-router'
 import { cartActions } from '@/Redux/slices/cartSlice'
 import { useSelector, useDispatch } from 'react-redux'
+import { resturanActions } from '@/Redux/slices/restaurantSlice'
 
 export default function RestaurantScreen () {
   const [quantity, setQuantities] = useState({})
   const router = useRouter()
-
+  const [Add, setAdd] = useState(false)
   const [render, setRender] = useState(false)
   const [isId, setIsid] = useState(1)
   const { width } = useWindowDimensions()
@@ -47,6 +48,8 @@ export default function RestaurantScreen () {
   const [Total, setTotal] = useState(null)
   const [toggle, setToggle] = useState(false)
   const [renderCart, setRenderCart] = useState(false)
+  const [itemLoading, setItemLoading] = useState({})
+  const [Action, setAction] = useState('')
   const dispatch = useDispatch()
 
   const [fontsLoaded] = useFonts({
@@ -79,30 +82,46 @@ export default function RestaurantScreen () {
     console.log('localCart:', localCart)
   }, [localCart])
 
-  const HandleAddToCart = async (dish, action) => {
-    const id = dish.id.toString() // Ensure it's a string for key consistency
-    let newQty
+  const [load, setLoad] = useState(false)
+  useEffect(() => {
+    console.log('itemLoading updated:', itemLoading)
+  }, [itemLoading])
 
-    // Step 1: Get stored quantity data (object format)
+  const HandleAddToCart = async (dish, action) => {
+    const id = dish.id.toString()
+    let newQty
+    let currentQty
+
+    setAction(action)
+    setItemLoading(prev => ({ ...prev, [id]: true }))
+
+    // ✅ Immediately update UI state
+    setQuantities(prev => {
+      currentQty = prev[id] || 0
+      newQty = action === 'add' ? currentQty + 1 : Math.max(currentQty - 1, 0)
+      if (newQty > currentQty) {
+        setAction('')
+      }
+
+      return { ...prev, [id]: newQty }
+    })
+
+    console.log('new', newQty)
+    console.log('curr', currentQty)
+
+    // Get stored data and update it in the background
     const quantityData = await AsyncStorage.getItem('quantity')
     const parsedQuantities = quantityData ? JSON.parse(quantityData) : {}
-    const currentQty = parsedQuantities[id] || 0
-
-    // Step 2: Update the quantity
-    newQty = action === 'add' ? currentQty + 1 : Math.max(currentQty - 1, 0)
     const updatedQuantities = { ...parsedQuantities, [id]: newQty }
-
-    // Step 3: Save to AsyncStorage + update state
     await AsyncStorage.setItem('quantity', JSON.stringify(updatedQuantities))
 
-    // Step 4: Update stored food cart
+    // Handle cart storage
     const storedData = await AsyncStorage.getItem('storedFood')
     let storedFood = storedData ? JSON.parse(storedData) : []
 
     const existingFoodIndex = storedFood.findIndex(
-      item => item.id === parseInt(dish.id)
+      item => item.id === parseInt(id)
     )
-
     if (existingFoodIndex !== -1) {
       storedFood[existingFoodIndex] = {
         ...storedFood[existingFoodIndex],
@@ -110,17 +129,69 @@ export default function RestaurantScreen () {
         price: parseFloat(dish.price) * newQty
       }
     } else if (newQty > 0) {
-      // Only add if quantity > 0
       storedFood.push({ ...dish, quantity: newQty })
     }
 
-    // Optional: remove items with quantity 0 from storedFood
     storedFood = storedFood.filter(item => item.quantity > 0)
-
     setStoredFood(storedFood)
     await AsyncStorage.setItem('storedFood', JSON.stringify(storedFood))
     dispatch(cartActions.addToCart(storedFood))
   }
+
+  // const HandleAddToCart = async (dish, action) => {
+  //   const id = dish.id.toString() // Ensure it's a string for key consistency
+  //   let newQty
+
+  //   setAction(action)
+  //   setItemLoading(prev => ({ ...prev, [id]: true }))
+
+  //   // Step 1: Get stored quantity data (object format)
+  //   const quantityData = await AsyncStorage.getItem('quantity')
+  //   const parsedQuantities = quantityData ? JSON.parse(quantityData) : {}
+  //   const currentQty = parsedQuantities[id] || 0
+
+  //   // Step 2: Update the quantity
+  //   // setTimeout(() => {
+  //   //   newQty = action === 'add' ? currentQty + 1 : Math.max(currentQty - 1, 0)
+  //   // }, 2000)
+
+  //   newQty = action === 'add' ? currentQty + 1 : Math.max(currentQty - 1, 0)
+
+  //   const updatedQuantities = { ...parsedQuantities, [id]: newQty }
+
+  //   if (newQty > currentQty) {
+  //     setAction('')
+  //   }
+
+  //   // Step 3: Save to AsyncStorage + update state
+  //   await AsyncStorage.setItem('quantity', JSON.stringify(updatedQuantities))
+
+  //   // Step 4: Update stored food cart
+  //   const storedData = await AsyncStorage.getItem('storedFood')
+  //   let storedFood = storedData ? JSON.parse(storedData) : []
+
+  //   const existingFoodIndex = storedFood.findIndex(
+  //     item => item.id === parseInt(dish.id)
+  //   )
+
+  //   if (existingFoodIndex !== -1) {
+  //     storedFood[existingFoodIndex] = {
+  //       ...storedFood[existingFoodIndex],
+  //       quantity: newQty,
+  //       price: parseFloat(dish.price) * newQty
+  //     }
+  //   } else if (newQty > 0) {
+  //     // Only add if quantity > 0
+  //     storedFood.push({ ...dish, quantity: newQty })
+  //   }
+
+  //   // Optional: remove items with quantity 0 from storedFood
+  //   storedFood = storedFood.filter(item => item.quantity > 0)
+
+  //   setStoredFood(storedFood)
+  //   await AsyncStorage.setItem('storedFood', JSON.stringify(storedFood))
+  //   dispatch(cartActions.addToCart(storedFood))
+  // }
 
   const loadQuantities = async () => {
     const quantityData = await AsyncStorage.getItem('quantity')
@@ -132,7 +203,7 @@ export default function RestaurantScreen () {
     loadQuantities()
   }, [storedFood])
 
-  const HandleDeleteFromAddToCart = async dish => {
+  const HandleDeleteFromAddToCart = async (dish, action) => {
     const id = parseInt(dish.id)
 
     // setQuantities(prev => {
@@ -141,13 +212,17 @@ export default function RestaurantScreen () {
     //   // Update quantities state
     //   return { ...prev, [id]: newQty }
     // })
-
+    setAction(action)
     const quantityData = await AsyncStorage.getItem('quantity')
     const parsedQuantities = quantityData ? JSON.parse(quantityData) : {}
     const currentQty = parsedQuantities[id] || 0
     const newQty = Math.max(currentQty - 1, 0)
     const updatedQuantities = { ...parsedQuantities, [id]: newQty }
     await AsyncStorage.setItem('quantity', JSON.stringify(updatedQuantities))
+
+    if (newQty < currentQty) {
+      setAction('')
+    }
 
     const storedData = await AsyncStorage.getItem('storedFood')
     let Storedfood = JSON.parse(storedData) || []
@@ -205,16 +280,16 @@ export default function RestaurantScreen () {
         ?.reduce((curr, acc) => curr + parseFloat(acc.price), 0)
         .toFixed(2)
 
-    console.log('Total:', Totalamaount)
+    // console.log('Total:', Totalamaount)
     setTotal(Totalamaount)
   }, [localCart])
 
-  useEffect(() => {
-    console.log('CartCount:', CartCount)
-  }, [CartCount])
-  useEffect(() => {
-    console.log('Total:', Total)
-  }, [Total])
+  // useEffect(() => {
+  //   console.log('CartCount:', CartCount)
+  // }, [CartCount])
+  // useEffect(() => {
+  //   console.log('Total:', Total)
+  // }, [Total])
 
   useFocusEffect(
     React.useCallback(() => {
@@ -258,14 +333,32 @@ export default function RestaurantScreen () {
     },
     default: {}
   })
-  const params = useLocalSearchParams()
-  // const item = params.item ? JSON.parse(params.item) : {}
-  // const tittle = params.tittle ? JSON.parse(params.tittle) : {}
-  const { item, tittle } = useLocalSearchParams()
 
-  const restaurantItem = JSON.parse(item)
-  const Dishes = restaurantItem.dishes
-  console.log('items:', restaurantItem)
+  const { id, parentId, tittle } = useLocalSearchParams()
+
+  // console.log("Pid:", parentId);
+
+  const parentData = useSelector(state =>
+    state.resturant.data.filter(item => item.id === parseInt(parentId))
+  )
+
+  // console.log('parentId:', parentId && parentId)
+  // console.log('id:', id)
+  // console.log('tittle:', tittle)
+
+  const restaurantItem = parentData[0]
+
+  const item =
+    restaurantItem &&
+    restaurantItem?.content?.find(item => item.id === parseInt(id))
+  // console.log('IItemmm:', item)
+
+  // const dishes = parentData[0].content
+  // console.log('dish:', dishes)
+
+  // console.log('star:', starr)
+
+  // console.log('res:', restaurantItem)
 
   const navigation = useNavigation()
 
@@ -355,7 +448,6 @@ export default function RestaurantScreen () {
         {/* Back Arrow Done *************************/}
 
         {/* Cartitems **************************************** */}
-
         {storedFood.length > 0 ? (
           <View
             style={{
@@ -448,7 +540,6 @@ export default function RestaurantScreen () {
         {/* Cartitems Done**************************************** */}
 
         {/* Order Details *******************************************/}
-
         <View
           style={{
             top: insets.top + 10,
@@ -546,7 +637,7 @@ export default function RestaurantScreen () {
               </TouchableOpacity>
 
               <Image
-                source={restaurantItem.image}
+                source={restaurantItem?.image}
                 style={{ width: '100%', height: 260 }}
               />
               {/* <Text className='text-white'>{item.name}</Text>
@@ -557,10 +648,10 @@ export default function RestaurantScreen () {
               className={`bg-white -mt-16 rounded-tr-3xl   rounded-tl-3xl `}
             >
               <View className=' w-full p-4 flex flex-col gap-3 '>
-                <Text className='font-bold  w-full'>{restaurantItem.name}</Text>
+                <Text className='font-bold  w-full'>{item?.name}</Text>
                 <View className='flex justify-start flex-col gap-4 '>
                   <Text className='font-bold  w-full flex justify-start items-center gap-3 b'>
-                    <Text>{restaurantItem.star}</Text>{' '}
+                    <Text>{item?.star}</Text>
                     <Text className='text-gray-500'>|</Text>
                     <Text className='text-gray-500'> Fast Food</Text>
                   </Text>
@@ -576,9 +667,7 @@ export default function RestaurantScreen () {
                     <Text className='text-gray-500 '>Nearby Street</Text>
                   </View>
                 </View>
-                <Text className='text-gray-500 '>
-                  {restaurantItem.description}
-                </Text>
+                <Text className='text-gray-500 '>{item?.description}</Text>
                 <Text className='text-gray-500 text-lg'>{tittle}</Text>
               </View>
             </View>
@@ -589,113 +678,138 @@ export default function RestaurantScreen () {
 
               {isLargeScreen || isExtra ? (
                 <View
-                  style={{ minHeight: Dishes.length * 42 }}
+                  style={{ minHeight: item?.dishes?.length * 42 }}
                   className='flex flex-row flex-wrap justify-center gap-5 '
                 >
-                  {Dishes.map((dish, i) => (
-                    <View
-                      key={dish.id}
-                      style={[
-                        {
-                          margin: isLargeScreen ? 25 : isExtra ? 8 : 8,
-                          borderRadius: 8,
-                          width: isLargeScreen
-                            ? 200
-                            : isExtra
-                            ? 400
-                            : width - 22
-                        },
-                        shadowStyle // Spread the shadowStyle here
-                      ]}
-                      className='p-2 bg-white relative par flex flex-row justify-between  '
-                    >
+                  {item &&
+                    item.dishes?.map((dish, i) => (
                       <View
-                        style={{
-                          height: isLargeScreen ? 100 : 100,
-                          width: isLargeScreen ? 200 : 100,
-                          // borderRadius: 12,
-                          overflow: 'hidden'
-                        }}
-                        className='bg-blue-500 rounded-xl'
+                        key={dish.id}
+                        style={[
+                          {
+                            margin: isLargeScreen ? 25 : isExtra ? 8 : 8,
+                            borderRadius: 8,
+                            width: isLargeScreen
+                              ? 200
+                              : isExtra
+                              ? 400
+                              : width - 22
+                          },
+                          shadowStyle // Spread the shadowStyle here
+                        ]}
+                        className='p-2 bg-white relative par flex flex-row justify-between  '
                       >
-                        <Image
-                          className=' w-full '
+                        <View
                           style={{
                             height: isLargeScreen ? 100 : 100,
                             width: isLargeScreen ? 200 : 100,
-                            resizeMode: 'cover'
+                            // borderRadius: 12,
+                            overflow: 'hidden'
                           }}
-                          source={dish.image}
-                        />
-                      </View>
-                      <View className='p-2 flex-1 flex flex-col gap-5'>
-                        <View>
-                          <Text
+                          className='bg-blue-500 rounded-xl'
+                        >
+                          <Image
+                            className=' w-full '
                             style={{
-                              fontFamily: 'Poppins_400Regular',
-                              fontSize: 15
+                              height: isLargeScreen ? 100 : 100,
+                              width: isLargeScreen ? 200 : 100,
+                              resizeMode: 'cover'
                             }}
-                            className='font-bold dish '
-                          >
-                            {dish.name}
-                          </Text>
-                          <Text className='text-gray-500'>
-                            {dish.description}
-                          </Text>
-                          <Text>${dish.price}</Text>
+                            source={dish.image}
+                          />
                         </View>
-
-                        <View className=' flex justify-end  flex-1 items-end '>
-                          <View className='flex flex-row justify-center gap-3 items-center '>
-                            <TouchableOpacity
-                              onPress={() => {
-                                HandleDeleteFromAddToCart(dish)
-                                HandleToggleTrue()
-                              }}
+                        <View className='p-2 flex-1 flex flex-col gap-5'>
+                          <View>
+                            <Text
                               style={{
-                                backgroundColor: themeColors.bgColor(1)
+                                fontFamily: 'Poppins_400Regular',
+                                fontSize: 15
                               }}
-                              className='rounded-full w-10 h-10 justify-center items-center'
+                              className='font-bold dish '
                             >
-                              <Icon.Minus
-                                height={20}
-                                width={20}
-                                strokeWidth={4}
-                                stroke='white'
-                              />
-                            </TouchableOpacity>
-
-                            <Text className='font-semibold w-5 text-gray-500'>
-                              {quantity[dish.id] || 0}
+                              {dish.name}
                             </Text>
-                            <TouchableOpacity
-                              onPress={() => {
-                                HandleAddToCart(dish, 'add')
-                                HandleToggleTrue()
-                              }}
-                              style={{
-                                backgroundColor: themeColors.bgColor(1)
-                              }}
-                              className='rounded-full w-10 h-10 justify-center items-center'
-                            >
-                              <Icon.Plus
-                                height={20}
-                                width={20}
-                                strokeWidth={4}
-                                stroke='white'
-                              />
-                            </TouchableOpacity>
+                            <Text className='text-gray-500'>
+                              {dish.description}
+                            </Text>
+                            <Text>${dish.price}</Text>
+                          </View>
+
+                          <View className=' flex justify-end  flex-1 items-end '>
+                            <View className='flex flex-row justify-center gap-3 items-center '>
+                              <TouchableOpacity
+                                onPress={() => {
+                                  HandleDeleteFromAddToCart(dish, 'sub')
+                                  setAdd(true)
+                                  HandleToggleTrue()
+                                }}
+                                style={{
+                                  backgroundColor: themeColors.bgColor(1)
+                                }}
+                                className='rounded-full w-10 h-10 justify-center items-center'
+                              >
+                                {itemLoading &&
+                                itemLoading[dish?.id] === true &&
+                                Action &&
+                                Action === 'sub' ? (
+                                  <>
+                                    <Icon.Loader className=' w-5 h-5 animate-spin' />
+                                  </>
+                                ) : (
+                                  <Icon.Minus
+                                    height={20}
+                                    width={20}
+                                    strokeWidth={4}
+                                    stroke='white'
+                                  />
+                                )}
+                              </TouchableOpacity>
+
+                              <Text className='font-semibold w-5 text-gray-500'>
+                                {quantity[dish.id] || 0}
+                              </Text>
+                              <TouchableOpacity
+                                onPress={() => {
+                                  // console.log(
+                                  //   'load:',
+                                  //   itemLoading[dish.id.toString()]
+                                  // )
+
+                                  HandleAddToCart(dish, 'add')
+                                  HandleToggleTrue()
+                                }}
+                                style={{
+                                  backgroundColor: themeColors.bgColor(1)
+                                }}
+                                className='rounded-full w-10 h-10 justify-center items-center'
+                              >
+                                {itemLoading &&
+                                itemLoading[dish?.id] === true &&
+                                Action &&
+                                Action === 'add' ? (
+                                  <>
+                                    <Icon.Loader className=' w-5 h-5 animate-spin' />
+                                  </>
+                                ) : (
+                                  <Icon.Plus
+                                    height={20}
+                                    width={20}
+                                    strokeWidth={4}
+                                    stroke='white'
+                                  />
+                                )}
+                              </TouchableOpacity>
+                            </View>
                           </View>
                         </View>
                       </View>
-                    </View>
-                  ))}
+                    ))}
                 </View>
               ) : (
                 <>
                   <View className='flex  justify-center flat  overflow-auto'>
                     <FlatList
-                      style={{ minHeight: restaurantItem.dishes.length * 42 }}
+                      style={{ minHeight: item && item.length * 42 }}
                       key={
                         isLargeScreen
                           ? 'large-screen'
@@ -703,7 +817,7 @@ export default function RestaurantScreen () {
                           ? 'extra-screen'
                           : 'small-screen'
                       } // Unique key based on screen size
-                      data={restaurantItem.dishes}
+                      data={item?.dishes}
                       keyExtractor={item => item.id.toString()}
                       numColumns={isLargeScreen ? 3 : isExtra ? 6 : 1}
                       renderItem={({ item: dish }) => (
@@ -771,7 +885,7 @@ export default function RestaurantScreen () {
                               <View className='flex flex-row justify-center gap-3 items-center '>
                                 <TouchableOpacity
                                   onPress={() => {
-                                    HandleDeleteFromAddToCart(dish)
+                                    HandleDeleteFromAddToCart(dish, 'sub')
                                     HandleToggleTrue()
                                   }}
                                   style={{
@@ -779,12 +893,21 @@ export default function RestaurantScreen () {
                                   }}
                                   className='rounded-full w-10 h-10 justify-center items-center'
                                 >
-                                  <Icon.Minus
-                                    height={20}
-                                    width={20}
-                                    strokeWidth={4}
-                                    stroke='white'
-                                  />
+                                  {itemLoading &&
+                                  itemLoading[dish?.id] === true &&
+                                  Action &&
+                                  Action === 'sub' ? (
+                                    <>
+                                      <Icon.Loader className=' w-5 h-5 animate-spin' />
+                                    </>
+                                  ) : (
+                                    <Icon.Minus
+                                      height={20}
+                                      width={20}
+                                      strokeWidth={4}
+                                      stroke='white'
+                                    />
+                                  )}
                                 </TouchableOpacity>
 
                                 <Text className='font-semibold w-5 text-center text-gray-500'>
@@ -800,12 +923,28 @@ export default function RestaurantScreen () {
                                   }}
                                   className='rounded-full w-10 h-10 justify-center items-center'
                                 >
-                                  <Icon.Plus
+                                  {itemLoading &&
+                                  itemLoading[dish?.id] === true &&
+                                  Action &&
+                                  Action === 'add' ? (
+                                    <>
+                                      <Icon.Loader className=' w-5 h-5 animate-spin' />
+                                    </>
+                                  ) : (
+                                    <Icon.Plus
+                                      height={20}
+                                      width={20}
+                                      strokeWidth={4}
+                                      stroke='white'
+                                    />
+                                  )}
+
+                                  {/* <Icon.Plus
                                     height={20}
                                     width={20}
                                     strokeWidth={4}
                                     stroke='white'
-                                  />
+                                  /> */}
                                 </TouchableOpacity>
                               </View>
                             </View>

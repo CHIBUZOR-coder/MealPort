@@ -1,4 +1,4 @@
-import { featuredDishes } from '@/Categories'
+// import { featuredDishes } from '@/Categories'
 import {
   FlatList,
   Image,
@@ -49,6 +49,8 @@ const Featured = () => {
     default: {}
   })
 
+  const featuredDishes = useSelector(state => state.resturant.data)
+
   // const isLargeScreen = width >= 768 // Define "md" breakpoint
   // const numColumns = isLargeScreen ? 3 : 1 // Define number of columns based on screen size
   return (
@@ -80,6 +82,7 @@ const Featured = () => {
         // 👈 3 Columns on Large Screens, 1 Column on Small Screens
         keyExtractor={item => item.id.toString()}
         renderItem={({ item }) => {
+         
           return (
             <View View className={` py-1 flex flex-col gap-6 touch  `}>
               <View className='flex flex-col gap-2'>
@@ -95,7 +98,11 @@ const Featured = () => {
                     onPress={() =>
                       router.push({
                         pathname: '/SeeAll',
-                        params: { data: JSON.stringify(item.content) }
+                        params: {
+                      
+                          parentId: item.id,
+                          tittle: item.tittle
+                        }
                       })
                     }
                     className='flex flex-col '
@@ -134,8 +141,12 @@ const Featured = () => {
                           router.push({
                             pathname: '/restaurant',
                             params: {
-                              item: JSON.stringify(subItem),
-                              tittle: item.tittle
+                              parentId: item.id,
+
+                              id: subItem.id,
+                              tittle: item.tittle,
+                              name: item.name,
+                              image: item.image
                             }
                           })
                         }
