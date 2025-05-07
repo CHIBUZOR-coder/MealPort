@@ -55,15 +55,7 @@ const Featured = () => {
   // const numColumns = isLargeScreen ? 3 : 1 // Define number of columns based on screen size
   return (
     <SafeAreaView className='mt-8 relative ' style={{ flex: 1 }}>
-      {/* <View
-        style={{
-          width: '100%',
-          height: '100%',
-          backgroundColor: 'yellow',
-          zIndex: 20
-        }}
-        className='w-full absolute top-0 left-0 z-20 '
-      ></View> */}
+     
       <FlatList
         data={featuredDishes}
         ItemSeparatorComponent={() => (

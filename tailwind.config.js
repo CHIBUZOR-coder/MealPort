@@ -45,6 +45,8 @@ module.exports = {
         text: "rgba(192, 192, 192, 1)",
         textt: "rgba(192, 192, 192, 0.3)",
         border: "rgba(75, 85, 99, 1)",
+        placeHolder:"rgba(107, 114, 128, 0.6)",
+        radio:"rgba(107, 114, 128, 0.4)",
         dryGray: "rgba(224, 213, 213, 1)",
         drkb: "rgba(27, 30, 50, 0.8)",
         drkb2: "rgba(27, 30, 50, 1)",

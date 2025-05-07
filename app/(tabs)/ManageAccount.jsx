@@ -23,9 +23,10 @@ import * as Icon from 'react-native-feather'
 import React, { useCallback, useState } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 import { themeColors } from '@/theme'
-import { router, useNavigation } from 'expo-router'
+import { useNavigation, useRouter } from 'expo-router'
 
-const Login = () => {
+const ManageAccount = () => {
+  const router = useRouter()
   const { width } = useWindowDimensions()
   const isExtraSmall = width < 500
   const isSmall = width >= 500
@@ -102,7 +103,7 @@ const Login = () => {
             className='flex justify-center items-center relative '
             style={{
               backgroundColor: themeColors.bgColor(0.8),
-              height: isLargeScreen || isMedium || isExtra ? 400 : 400,
+              height: 400,
               width: '100%'
             }}
           >
@@ -145,7 +146,7 @@ const Login = () => {
               }}
             >
               <View>
-                <Text className='font-semibold text-lg'>Login</Text>
+                <Text className='font-semibold text-lg'>Account Manggment</Text>
               </View>
               <View
                 style={{
@@ -157,56 +158,158 @@ const Login = () => {
                   style={[
                     styles.TextStyle,
                     {
-                      padding: isLargeScreen || isExtra || isSmall ? 8 : 20,
+                      padding: isLargeScreen || isExtra || isSmall ? 15 : 20,
                       outline: 'none'
                     }
                   ]}
-                  placeholder='Email'
+                  placeholder='First Name'
                   placeholderTextColor={themeColors.placeHolerColor(0.5)}
                 />
-                <View className='w-[80%] p-5 rounded-lg bg-white flex flex-row items-center '>
-                  <TextInput
-                    style={{ outline: 'none' }}
-                    placeholder='Confirm Password'
-                    placeholderTextColor={themeColors.placeHolerColor(0.5)}
-                    secureTextEntry={!showPassword}
-                  />
-                  <TouchableOpacity
-                    onPress={() => setShowPassword(!showPassword)}
-                    style={styles.icon}
-                  >
-                    <Icon.Eye strokeWidth={2} stroke={themeColors.bgColor(1)} />
-                    {/* Use Icon.EyeOff when !showPassword */}
-                  </TouchableOpacity>
+                <TextInput
+                  style={[
+                    styles.TextStyle,
+                    {
+                      padding: isLargeScreen || isExtra || isSmall ? 15 : 20,
+                      outline: 'none'
+                    }
+                  ]}
+                  placeholder='Last Name'
+                  placeholderTextColor={themeColors.placeHolerColor(0.5)}
+                />
+                <TextInput
+                  keyboardType='numeric'
+                  style={[
+                    styles.TextStyle,
+                    {
+                      padding: isLargeScreen || isExtra || isSmall ? 15 : 20,
+                      outline: 'none'
+                    }
+                  ]}
+                  placeholder='Phone'
+                  placeholderTextColor={themeColors.placeHolerColor(0.5)}
+                />
+                <View className='w-[80%] p-5 rounded-lg bg-white '>
+                  <Text className=' text-gray-500'>
+                    Do you wish to change your email?
+                  </Text>
+                  <View className='flex flex-row  items-center justify-around py-2 '>
+                    <View className='flex flex-row gap-3'>
+                      <Text className='text-gray-500'>Yes</Text>
+                      <Pressable
+                        onPress={() => {
+                          setAccept(true)
+                          console.log('Accept Pressed true')
+                        }}
+                        style={[
+                          styles.radio,
+                          {
+                            backgroundColor:
+                              Accept === true
+                                ? themeColors.bgColor(1)
+                                : 'rgba(107, 114, 128, 0.4)'
+                          }
+                        ]}
+                        className='rounded-full radio '
+                      ></Pressable>
+                    </View>
+
+                    <View
+                      style={{ marginHorizontal: 50 }}
+                      className='flex flex-row gap-3'
+                    >
+                      <Text className='text-gray-500'>No</Text>
+
+                      <Pressable
+                        onPress={() => {
+                          console.log('Accept Pressed false')
+                          setAccept(false)
+                        }}
+                        style={[
+                          styles.radio,
+                          {
+                            backgroundColor:
+                              Accept === false
+                                ? themeColors.bgColor(1)
+                                : 'rgba(107, 114, 128, 0.4)'
+                          }
+                        ]}
+                        className='rounded-full radio
+'
+                      ></Pressable>
+                    </View>
+                  </View>
                 </View>
+
+                {Accept && (
+                  <TextInput
+                    style={[
+                      styles.TextStyle,
+                      {
+                        padding: isLargeScreen || isExtra || isSmall ? 15 : 20,
+                        outline: 'none'
+                      }
+                    ]}
+                    placeholder='Email'
+                    placeholderTextColor={themeColors.placeHolerColor(0.5)}
+                  />
+                )}
+
                 <View className='w-[80%] p-5 rounded-lg bg-white'>
+                  <TouchableOpacity
+                    onPress={pickImage}
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: 10,
+                      // borderTopRightRadius: 12,
+                      // borderBottomLeftRadius: 12,
+                      backgroundColor: themeColors.bgColor(1),
+                      borderRadius: 8
+                    }}
+                  >
+                    <Feather
+                      name='image'
+                      size={20}
+                      color='white'
+                      style={{ marginRight: 10 }}
+                    />
+                    <Text style={{ color: 'white', fontSize: 16 }}>
+                      Add an image
+                    </Text>
+                  </TouchableOpacity>
+                  {file && (
+                    <View style={{ marginTop: 20, alignItems: 'center' }}>
+                      <Image
+                        source={{ uri: file.uri }}
+                        style={{ width: 100, height: 100, borderRadius: 10 }}
+                        resizeMode='cover'
+                      />
+                      <Text style={{ marginTop: 10 }}>
+                        {file.name} ({Math.round(file.size / 1024)} KB)
+                      </Text>
+                    </View>
+                  )}
+                </View>
+                <View
+                  className='w-[80%] p-5 rounded-lg bg-white'
+                  placeholder='Email'
+                >
                   <TouchableOpacity
                     style={{
                       flexDirection: 'row',
                       alignItems: 'center',
                       justifyContent: 'center',
                       padding: 10,
+                      // borderTopRightRadius: 12,
+                      // borderBottomLeftRadius: 12,
                       backgroundColor: themeColors.bgColor(1),
                       borderRadius: 8
                     }}
                     className='font-semibold'
                   >
-                    <Text className='font-semibold text-white'>Login</Text>
+                    Submit
                   </TouchableOpacity>
-                </View>
-
-                <View>
-                  <Text>Don't have an account? </Text>
-                  <Pressable
-                    onPress={() => {
-                      router.push({
-                        pathname: '/Register'
-                      })
-                    }}
-                    className='flex justify-center items-center '
-                  >
-                    <Text>Signup</Text>
-                  </Pressable>
                 </View>
               </View>
             </View>
@@ -264,48 +367,88 @@ const Login = () => {
                   placeholder='Phone'
                   placeholderTextColor={themeColors.placeHolerColor(0.5)}
                 />
+                <View className='w-[80%] p-5 rounded-lg bg-white flex flex-row items-center '>
+                  <TextInput
+                    style={{ outline: 'none' }}
+                    placeholder='Password'
+                    placeholderTextColor={themeColors.placeHolerColor(0.5)}
+                    secureTextEntry={!showPassword}
+                  />
+                  <TouchableOpacity
+                    onPress={() => setShowPassword(!showPassword)}
+                    style={styles.icon}
+                  >
+                    <Icon.Eye strokeWidth={2} stroke={themeColors.bgColor(1)} />
+                    {/* Use Icon.EyeOff when !showPassword */}
+                  </TouchableOpacity>
+                </View>
 
                 <View className='w-[80%] p-5 rounded-lg bg-white '>
                   <Text className=' text-gray-500'>
-                    Register as resturant owner?
+                    Do you wish to change your email?
                   </Text>
                   <View className='flex flex-row  items-center justify-around py-2 '>
-                    <Pressable
-                      onPress={() => {
-                        setAccept(true)
-                        console.log('Accept Pressed true')
-                      }}
-                      style={[
-                        styles.radio,
-                        {
-                          backgroundColor:
-                            Accept === true
-                              ? themeColors.bgColor(1)
-                              : 'rgba(107, 114, 128, 0.4)'
-                        }
-                      ]}
-                      className='rounded-full radio '
-                    ></Pressable>
-                    <Pressable
-                      onPress={() => {
-                        console.log('Accept Pressed false')
-                        setAccept(false)
-                      }}
-                      style={[
-                        styles.radio,
-                        {
-                          marginHorizontal: 16,
-                          backgroundColor:
-                            Accept === false
-                              ? themeColors.bgColor(1)
-                              : 'rgba(107, 114, 128, 0.4)'
-                        }
-                      ]}
-                      className='rounded-full radio
+                    <View className='flex flex-row gap-3'>
+                      <Text className='text-gray-500'>Yes</Text>
+                      <Pressable
+                        onPress={() => {
+                          setAccept(true)
+                          console.log('Accept Pressed true')
+                        }}
+                        style={[
+                          styles.radio,
+                          {
+                            backgroundColor:
+                              Accept === true
+                                ? themeColors.bgColor(1)
+                                : 'rgba(107, 114, 128, 0.4)'
+                          }
+                        ]}
+                        className='rounded-full radio '
+                      ></Pressable>
+                    </View>
+
+                    <View
+                      style={{ marginHorizontal: 50 }}
+                      className='flex flex-row gap-3'
+                    >
+                      <Text className='text-gray-500'>No</Text>
+
+                      <Pressable
+                        onPress={() => {
+                          console.log('Accept Pressed false')
+                          setAccept(false)
+                        }}
+                        style={[
+                          styles.radio,
+                          {
+                            backgroundColor:
+                              Accept === false
+                                ? themeColors.bgColor(1)
+                                : 'rgba(107, 114, 128, 0.4)'
+                          }
+                        ]}
+                        className='rounded-full radio
 '
-                    ></Pressable>
+                      ></Pressable>
+                    </View>
                   </View>
                 </View>
+
+                {Accept && (
+                  <TextInput
+                    style={[
+                      styles.TextStyle,
+                      {
+                        padding: isLargeScreen || isExtra || isSmall ? 15 : 20,
+                        outline: 'none'
+                      }
+                    ]}
+                    placeholder='Email'
+                    placeholderTextColor={themeColors.placeHolerColor(0.5)}
+                  />
+                )}
+
                 <View className='w-[80%] p-5 rounded-lg bg-white'>
                   <TouchableOpacity
                     onPress={pickImage}
@@ -362,20 +505,6 @@ const Login = () => {
                     <Text className='font-semibold text-white'>Submit</Text>
                   </TouchableOpacity>
                 </View>
-
-                <View>
-                  <Text>Don't have an account? </Text>
-                  <Pressable
-                    onPress={() => {
-                      router.push({
-                        pathname: '/Register'
-                      })
-                    }}
-                    className='flex justify-center items-center '
-                  >
-                    <Text>Signup</Text>
-                  </Pressable>
-                </View>
               </View>
             </View>
           )}
@@ -385,7 +514,7 @@ const Login = () => {
   )
 }
 
-export default Login
+export default ManageAccount
 
 const styles = StyleSheet.create({
   TextStyle: {

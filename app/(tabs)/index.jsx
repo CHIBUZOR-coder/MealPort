@@ -11,6 +11,16 @@ import {
   TouchableOpacity
 } from 'react-native'
 
+{
+  /* <View className='w-[70%] bg-red-500 rounded-lg flex  gap-3 justify-center items-center'>
+        <TextInput className='bg-white  p-6 w-[80%]' placeholder='John' />
+        <TextInput className='bg-white  p-6 w-[80%]' placeholder='Doe' />
+        <TextInput className='bg-white  p-6 w-[80%]' type='email' placeholder='John Doe' />
+        <TextInput className='bg-white  p-6 w-[80%]' keyboardType='numeric' placeholder='John Doe' />
+        <TextInput className='bg-white  p-6 w-[80%]' type='file' />
+      </View> */
+}
+
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 import { HelloWave } from '@/components/HelloWave'

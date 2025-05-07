@@ -72,7 +72,6 @@ export default function TabLayout () {
           tabBarStyle: { display: 'none' }
         }}
       />
-
       <Tabs.Screen
         name='SeeAll'
         options={{
@@ -84,11 +83,33 @@ export default function TabLayout () {
           tabBarStyle: { display: 'none' }
         }}
       />
-
       <Tabs.Screen
         name='Login'
         options={{
           title: 'Login',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name='paperplane.fill' color={color} />
+          ),
+          headerShown: false,
+          tabBarStyle: { display: 'none' }
+        }}
+      />
+      
+      <Tabs.Screen
+        name='Register'
+        options={{
+          title: 'Register',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name='paperplane.fill' color={color} />
+          ),
+          headerShown: false,
+          tabBarStyle: { display: 'none' }
+        }}
+      />
+      <Tabs.Screen
+        name='ManageAccount'
+        options={{
+          title: 'Register',
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name='paperplane.fill' color={color} />
           ),
