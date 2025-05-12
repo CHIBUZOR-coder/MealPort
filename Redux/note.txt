@@ -1,0 +1,281 @@
+// //  tabBarPosition: "top",
+
+// import * as DocumentPicker from "expo-document-picker";
+
+//  const pickDocument = async () => {
+//     const result = await DocumentPicker.getDocumentAsync({
+//       type: 'image/*',
+//       copyToCacheDirectory: true
+//     })
+
+//     if (result.type === 'success') {
+//       const mimeType = result.mimeType || ''
+
+//       // Extra safety: check MIME type starts with "image/"
+//       if (!mimeType.startsWith('image/')) {
+//         alert('Only image files are allowed!')
+//         throw new Error('Invalid file type: Only image files are accepted.')
+//       }
+
+//       setFile(result)
+//       console.log('File selected:', result)
+//     } else {
+//       console.log('Document picking cancelled')
+//     }
+//   }
+
+
+
+
+
+
+  <View
+              className={'-mt-10 rounded-tr-lg rounded-tl-3xl'}
+              style={{
+                flex: 1,
+                display: 'flex',
+                // minHeight:'150vh',
+                justifyContent: 'center',
+                alignItems: 'center',
+                position: 'relative',
+                backgroundColor: 'white',
+                width: '100%',
+                paddingVertical: isLargeScreen || isExtra || isSmall ? 20 : 0 // Adjust as needed
+              }}
+            >
+              <View>
+                <Text className='font-semibold text-lg'>Register</Text>
+              </View>
+              <View
+                style={{
+                  width: isLargeScreen || isExtra || isSmall ? '40%' : '90%'
+                }}
+                className=' bg-primary py-8 my-6  relative rounded-lg flex justify-center items-center gap-4 '
+              >
+                <TextInput
+                  onChangeText={text => setFirstName(text)}
+                  value={firstname && firstname}
+                  style={[
+                    styles.TextStyle,
+                    {
+                      padding: isLargeScreen || isExtra || isSmall ? 15 : 20,
+                      outline: 'none'
+                    }
+                  ]}
+                  placeholder='First Name'
+                  placeholderTextColor={themeColors.placeHolerColor(0.5)}
+                />
+                <TextInput
+                  onChangeText={setLastName}
+                  value={lastname}
+                  style={[
+                    styles.TextStyle,
+                    {
+                      padding: isLargeScreen || isExtra || isSmall ? 15 : 20,
+                      outline: 'none'
+                    }
+                  ]}
+                  placeholder='Last Name'
+                  placeholderTextColor={themeColors.placeHolerColor(0.5)}
+                />
+
+                <TextInput
+                  onChangeText={setEmail}
+                  value={email}
+                  style={[
+                    styles.TextStyle,
+                    {
+                      padding: isLargeScreen || isExtra || isSmall ? 15 : 20,
+                      outline: 'none'
+                    }
+                  ]}
+                  placeholder='Email'
+                  placeholderTextColor={themeColors.placeHolerColor(0.5)}
+                />
+
+                <TextInput
+                  onChangeText={setAdress}
+                  value={adress}
+                  style={[
+                    styles.TextStyle,
+                    {
+                      padding: isLargeScreen || isExtra || isSmall ? 15 : 20,
+                      outline: 'none'
+                    }
+                  ]}
+                  placeholder='Adress'
+                  placeholderTextColor={themeColors.placeHolerColor(0.5)}
+                />
+
+                <TextInput
+                  onChangeText={setPhone}
+                  value={phone}
+                  style={[
+                    styles.TextStyle,
+                    {
+                      padding: isLargeScreen || isExtra || isSmall ? 15 : 20,
+                      outline: 'none'
+                    }
+                  ]}
+                  placeholder='Phone'
+                  placeholderTextColor={themeColors.placeHolerColor(0.5)}
+                />
+
+                <View className='w-[80%] p-5 rounded-lg bg-white flex flex-row items-center '>
+                  <TextInput
+                    onChangeText={text => setPassword(text)}
+                    value={password}
+                    style={{ outline: 'none' }}
+                    placeholder='Password'
+                    placeholderTextColor={themeColors.placeHolerColor(0.5)}
+                    secureTextEntry={!showPassword}
+                  />
+                  <TouchableOpacity
+                    onPress={() => setShowPassword(!showPassword)}
+                    style={styles.icon}
+                  >
+                    <Icon.Eye strokeWidth={2} stroke={themeColors.bgColor(1)} />
+                  </TouchableOpacity>
+                </View>
+                <View className='w-[80%] p-5 rounded-lg bg-white flex flex-row items-center '>
+                  <TextInput
+                    onChangeText={text => setconfirmCPassword(text)}
+                    value={confirmPassword}
+                    style={{ outline: 'none' }}
+                    placeholder='Confirm Password'
+                    placeholderTextColor={themeColors.placeHolerColor(0.5)}
+                    secureTextEntry={!showPassword}
+                  />
+                  <TouchableOpacity
+                    onPress={() => setShowPassword(!showPassword)}
+                    style={styles.icon}
+                  >
+                    <Icon.Eye strokeWidth={2} stroke={themeColors.bgColor(1)} />
+                  </TouchableOpacity>
+                </View>
+                <View className='w-[80%] p-5 rounded-lg bg-white '>
+                  <Text className=' text-gray-500'>
+                    Register as resturant owner?
+                  </Text>
+                  <View className='flex flex-row  items-center justify-around md:justify-start py-2 '>
+                    <View className='flex flex-row gap-3'>
+                      <Text className='text-gray-500'>Yes</Text>
+                      <Pressable
+                        onPress={() => {
+                          setIsOwner('true')
+                          console.log('Accept Pressed true')
+                        }}
+                        style={[
+                          styles.radio,
+                          {
+                            backgroundColor:
+                              isOwner === 'true'
+                                ? themeColors.bgColor(1)
+                                : 'rgba(107, 114, 128, 0.4)'
+                          }
+                        ]}
+                        className='rounded-full radio'
+                      ></Pressable>
+                    </View>
+
+                    <View
+                      style={{ marginHorizontal: 30 }}
+                      className='flex flex-row gap-3'
+                    >
+                      <Text className='text-gray-500'>No</Text>
+
+                      <Pressable
+                        onPress={() => {
+                          console.log('Accept Pressed false')
+                          setIsOwner('false')
+                        }}
+                        style={[
+                          styles.radio,
+                          {
+                            backgroundColor:
+                              isOwner === 'false'
+                                ? themeColors.bgColor(1)
+                                : 'rgba(107, 114, 128, 0.4)'
+                          }
+                        ]}
+                        className='rounded-full radio'
+                      ></Pressable>
+                    </View>
+                  </View>
+                </View>
+                <View
+                  className='w-[80%] p-5 rounded-lg bg-white'
+                  placeholder='Email'
+                >
+                  <TouchableOpacity
+                    onPress={pickImage}
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: 10,
+                      // borderTopRightRadius: 12,
+                      // borderBottomLeftRadius: 12,
+                      backgroundColor: themeColors.bgColor(1),
+                      borderRadius: 8
+                    }}
+                  >
+                    <Feather
+                      name='image'
+                      size={20}
+                      color='white'
+                      style={{ marginRight: 10 }}
+                    />
+                    <Text style={{ color: 'white', fontSize: 16 }}>
+                      Add an image
+                    </Text>
+                  </TouchableOpacity>
+                  {image && (
+                    <View style={{ marginTop: 20, alignItems: 'center' }}>
+                      <Image
+                        source={{ uri: image.uri }}
+                        style={{ width: 100, height: 100, borderRadius: 10 }}
+                        resizeMode='cover'
+                      />
+                      <Text style={{ marginTop: 10 }}>
+                        {image.name} ({Math.round(image.size / 1024)} KB)
+                      </Text>
+                    </View>
+                  )}
+                </View>
+                <View
+                  className='w-[80%] p-5 rounded-lg bg-white'
+                  placeholder='Email'
+                >
+                  <TouchableOpacity
+                    onPress={() => HandleRegister()}
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: 10,
+                      // borderTopRightRadius: 12,
+                      // borderBottomLeftRadius: 12,
+                      backgroundColor: themeColors.bgColor(1),
+                      borderRadius: 8
+                    }}
+                    className='font-semibold'
+                  >
+                    <Text className='text-white'>Submit</Text>
+                  </TouchableOpacity>
+                </View>
+                <View>
+                  <Text className='pass'>Already have an account? </Text>
+                  <Pressable
+                    onPress={() => {
+                      router.push({
+                        pathname: '/Login'
+                      })
+                    }}
+                    className='flex justify-center items-center '
+                  >
+                    <Text className='pass'>Login</Text>
+                  </Pressable>
+                </View>
+              </View>
+            </View>

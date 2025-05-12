@@ -33,7 +33,7 @@ module.exports = {
         use: "rgba(251, 249, 255, 1)",
         use2: "rgba(237, 242, 239, 1)",
         mainTrans: "rgb(8,8,8, 0.7)",
-        blacktrans: "rgba(0, 0, 0, 0.2)",
+        blacktrans: "rgba(0, 0, 0, 0.6)",
         blueBtn: "rgb(11,109,255, .7)",
         blueBtnH: "rgb(11,109,255, 1)",
         faintWhite: "rgb(246,246,246)",

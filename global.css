@@ -28,6 +28,10 @@
   bottom: 0%;
 }
 
+.pass {
+  @apply font-semibold text-gray-500;
+}
+
 /* .radio {
   background-color: rgba(107, 114, 128, 0.4);
 } */

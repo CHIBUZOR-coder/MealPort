@@ -94,7 +94,6 @@ export default function TabLayout () {
           tabBarStyle: { display: 'none' }
         }}
       />
-      
       <Tabs.Screen
         name='Register'
         options={{
@@ -110,6 +109,30 @@ export default function TabLayout () {
         name='ManageAccount'
         options={{
           title: 'Register',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name='paperplane.fill' color={color} />
+          ),
+          headerShown: false,
+          tabBarStyle: { display: 'none' }
+        }}
+      />
+
+      <Tabs.Screen
+        name='AccountRecovery'
+        options={{
+          title: 'AccountRecovery',
+          tabBarIcon: ({ color }) => (
+            <IconSymbol size={28} name='paperplane.fill' color={color} />
+          ),
+          headerShown: false,
+          tabBarStyle: { display: 'none' }
+        }}
+      />
+
+      <Tabs.Screen
+        name='VerifyEmail'
+        options={{
+          title: 'VerifyEmail',
           tabBarIcon: ({ color }) => (
             <IconSymbol size={28} name='paperplane.fill' color={color} />
           ),

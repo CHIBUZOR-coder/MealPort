@@ -24,45 +24,36 @@ import React, { useCallback, useState } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 import { themeColors } from '@/theme'
 import { router, useNavigation } from 'expo-router'
-import { useDispatch, useSelector } from 'react-redux'
-import { LoginUser, userActions } from '@/Redux/slices/UserSlice'
 
-const Login = () => {
+const AccountRecovery = () => {
   const { width } = useWindowDimensions()
   const isExtraSmall = width < 500
   const isSmall = width >= 500
   const isMedium = width >= 768 && width < 1001
   const isLargeScreen = width >= 768 && width < 1001
   const isExtra = width > 1001
+  const [Accept, setAccept] = useState(null)
 
   const [slideAnim] = useState(new Animated.Value(width))
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-
+  const [file, setFile] = useState(null)
   const [showPassword, setShowPassword] = useState(false)
-  const dispatch = useDispatch()
-  const logLoad = useSelector(state => state?.user?.logLading)
-  const logModal = useSelector(state => state?.user?.logModalVisible)
 
-  const HandleLogin = async () => {
-    const logvalue = {
-      email,
-      password
-    }
-    const result = await dispatch(LoginUser(logvalue))
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true, // ✅ allows cropping
+      quality: 1
+    })
 
-    if (result.payload.success) {
-      console.log('Registration Success:', result.data)
-      setTimeout(() => {
-        dispatch(userActions.hideLogModal())
-        router.push({
-          pathname: '/'
-        })
-      }, 3000)
+    if (!result.canceled) {
+      const image = result.assets[0]
+      setFile({
+        uri: image.uri,
+        name: image.fileName || 'selected-image.jpg',
+        size: image.fileSize || 0
+      })
     } else {
-      setTimeout(() => {
-        dispatch(userActions.hideLogModal())
-      }, 3000)
+      console.log('Image picking cancelled')
     }
   }
 
@@ -154,7 +145,7 @@ const Login = () => {
               }}
             >
               <View>
-                <Text className='font-semibold text-lg'>Login</Text>
+                <Text className='font-semibold text-lg'>Account Recovry</Text>
               </View>
               <View
                 style={{
@@ -163,8 +154,6 @@ const Login = () => {
                 className=' bg-primary py-8 my-6  relative rounded-lg flex justify-center items-center gap-4 '
               >
                 <TextInput
-                  onChange={setEmail}
-                  value={email}
                   style={[
                     styles.TextStyle,
                     {
@@ -177,10 +166,8 @@ const Login = () => {
                 />
                 <View className='w-[80%] p-5 rounded-lg bg-white flex flex-row items-center '>
                   <TextInput
-                    onChangeText={setPassword}
-                    value={password}
                     style={{ outline: 'none' }}
-                    placeholder='Password'
+                    placeholder='Confirm Password'
                     placeholderTextColor={themeColors.placeHolerColor(0.5)}
                     secureTextEntry={!showPassword}
                   />
@@ -225,7 +212,7 @@ const Login = () => {
                   <Pressable
                     onPress={() => {
                       router.push({
-                        pathname: '/AccountRecovery'
+                        pathname: '/ManageAccount'
                       })
                     }}
                     className='flex justify-center items-center '
@@ -251,8 +238,24 @@ const Login = () => {
             >
               <View className='w-[90%] bg-primary py-8 my-6  relative rounded-lg flex justify-center items-center gap-4 '>
                 <TextInput
-                  onChangeText={setEmail}
-                  value={email}
+                  style={[
+                    styles.TextStyle,
+                    { padding: isLargeScreen || isExtra || isSmall ? 8 : 20 }
+                  ]}
+                  placeholder='First Name'
+                  placeholderTextColor={themeColors.placeHolerColor(0.5)}
+                />
+                <TextInput
+                  style={[
+                    styles.TextStyle,
+                    {
+                      padding: isLargeScreen || isExtra || isSmall ? 8 : 20
+                    }
+                  ]}
+                  placeholder='Last Name'
+                  placeholderTextColor={themeColors.placeHolerColor(0.5)}
+                />
+                <TextInput
                   style={[
                     styles.TextStyle,
                     {
@@ -262,26 +265,99 @@ const Login = () => {
                   placeholder='Email'
                   placeholderTextColor={themeColors.placeHolerColor(0.5)}
                 />
-
-                <View className='w-[80%] p-5 rounded-lg bg-white flex flex-row items-center '>
-                  <TextInput
-                    onChangeText={setPassword}
-                    value={password}
-                    style={{ outline: 'none' }}
-                    placeholder='Password'
-                    placeholderTextColor={themeColors.placeHolerColor(0.5)}
-                    secureTextEntry={!showPassword}
-                  />
-                  <TouchableOpacity
-                    onPress={() => setShowPassword(!showPassword)}
-                    style={styles.icon}
-                  >
-                    <Icon.Eye strokeWidth={2} stroke={themeColors.bgColor(1)} />
-                    {/* Use Icon.EyeOff when !showPassword */}
-                  </TouchableOpacity>
+                <TextInput
+                  keyboardType='numeric'
+                  style={[
+                    styles.TextStyle,
+                    {
+                      padding: isLargeScreen || isExtra || isSmall ? 8 : 20
+                    }
+                  ]}
+                  placeholder='Phone'
+                  placeholderTextColor={themeColors.placeHolerColor(0.5)}
+                />
+                <View className='w-[80%] p-5 rounded-lg bg-white '>
+                  <Text className=' text-gray-500'>
+                    Register as resturant owner?
+                  </Text>
+                  <View className='flex flex-row  items-center justify-around py-2 '>
+                    <Pressable
+                      onPress={() => {
+                        setAccept(true)
+                        console.log('Accept Pressed true')
+                      }}
+                      style={[
+                        styles.radio,
+                        {
+                          backgroundColor:
+                            Accept === true
+                              ? themeColors.bgColor(1)
+                              : 'rgba(107, 114, 128, 0.4)'
+                        }
+                      ]}
+                      className='rounded-full radio '
+                    ></Pressable>
+                    <Pressable
+                      onPress={() => {
+                        console.log('Accept Pressed false')
+                        setAccept(false)
+                      }}
+                      style={[
+                        styles.radio,
+                        {
+                          marginHorizontal: 16,
+                          backgroundColor:
+                            Accept === false
+                              ? themeColors.bgColor(1)
+                              : 'rgba(107, 114, 128, 0.4)'
+                        }
+                      ]}
+                      className='rounded-full radio
+'
+                    ></Pressable>
+                  </View>
                 </View>
-
                 <View className='w-[80%] p-5 rounded-lg bg-white'>
+                  <TouchableOpacity
+                    onPress={pickImage}
+                    style={{
+                      flexDirection: 'row',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      padding: 10,
+                      // borderTopRightRadius: 12,
+                      // borderBottomLeftRadius: 12,
+                      backgroundColor: themeColors.bgColor(1),
+                      borderRadius: 8
+                    }}
+                  >
+                    <Feather
+                      name='image'
+                      size={20}
+                      color='white'
+                      style={{ marginRight: 10 }}
+                    />
+                    <Text style={{ color: 'white', fontSize: 16 }}>
+                      Add an image
+                    </Text>
+                  </TouchableOpacity>
+                  {file && (
+                    <View style={{ marginTop: 20, alignItems: 'center' }}>
+                      <Image
+                        source={{ uri: file.uri }}
+                        style={{ width: 100, height: 100, borderRadius: 10 }}
+                        resizeMode='cover'
+                      />
+                      <Text style={{ marginTop: 10 }}>
+                        {file.name} ({Math.round(file.size / 1024)} KB)
+                      </Text>
+                    </View>
+                  )}
+                </View>
+                <View
+                  className='w-[80%] p-5 rounded-lg bg-white'
+                  placeholder='Email'
+                >
                   <TouchableOpacity
                     style={{
                       flexDirection: 'row',
@@ -314,7 +390,7 @@ const Login = () => {
                   <Pressable
                     onPress={() => {
                       router.push({
-                        pathname: '/AccountRecovery'
+                        pathname: '/ManageAccount'
                       })
                     }}
                     className='flex justify-center items-center '
@@ -331,7 +407,7 @@ const Login = () => {
   )
 }
 
-export default Login
+export default AccountRecovery
 
 const styles = StyleSheet.create({
   TextStyle: {
