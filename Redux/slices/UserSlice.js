@@ -14,7 +14,7 @@ const initialState = {
   verifyError: "",
 
   //login states
-  logLading: false,
+  logLoading: false,
   loggedData: [],
   logError: "",
   logModalVisible: false,
@@ -67,7 +67,7 @@ export const LoginUser = createAsyncThunk(
   "user/login",
   async (logvalue, { rejectWithValue }) => {
     try {
-      const res = await fetch("", {
+      const res = await fetch("http://localhost:5000/loginUser", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -76,10 +76,15 @@ export const LoginUser = createAsyncThunk(
       });
 
       const data = await res.json();
+
+      if (!res.ok) {
+        // backend responded with 400 or 500, send rejection
+        return rejectWithValue(data.message || "Login failed");
+      }
+
       return data;
     } catch (error) {
-      console.log(rejectWithValue(error.message));
-      return rejectWithValue(error.message);
+      return rejectWithValue(error.message || "Network error");
     }
   }
 );
@@ -129,6 +134,21 @@ const userSlice = createSlice({
         state.error = action.payload;
         state.verifyModal = true;
         state.verifyError = action.payload;
+      })
+      .addCase(LoginUser.pending, (state) => {
+        state.logLoading = true;
+      })
+      .addCase(LoginUser.fulfilled, (state, action) => {
+        state.logLoading = false;
+        state.logModalVisible = true;
+        state.loggedData = action.payload;
+        state.error = "";
+      })
+      .addCase(LoginUser.rejected, (state, action) => {
+        state.logLoading = false;
+        state.logModalVisible = true;
+        state.loggedData = [];
+        state.logError = action.payload;
       });
   },
 });

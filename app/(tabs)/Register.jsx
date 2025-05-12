@@ -185,7 +185,8 @@ const Register = () => {
 
         {modalVisible && (
           <Modal visible={modalVisible} transparent={true} animationType='fade'>
-            <View
+            <Pressable
+              onPress={() => dispatch(userActions.hideLogModal())}
               style={{
                 flex: 1,
                 justifyContent: 'center',
@@ -210,7 +211,7 @@ const Register = () => {
                   {(message && message) || 'Unknown error'}
                 </Text>
               </View>
-            </View>
+            </Pressable>
           </Modal>
         )}
 

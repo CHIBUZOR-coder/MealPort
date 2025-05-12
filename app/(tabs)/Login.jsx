@@ -12,7 +12,8 @@ import {
   Easing,
   Button,
   TouchableOpacity,
-  Pressable
+  Pressable,
+  Modal
 } from 'react-native'
 
 import * as ImagePicker from 'expo-image-picker'
@@ -20,12 +21,13 @@ import { Feather } from '@expo/vector-icons'
 import * as Icon from 'react-native-feather'
 
 //rnfes
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useFocusEffect } from '@react-navigation/native'
 import { themeColors } from '@/theme'
 import { router, useNavigation } from 'expo-router'
 import { useDispatch, useSelector } from 'react-redux'
 import { LoginUser, userActions } from '@/Redux/slices/UserSlice'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Login = () => {
   const { width } = useWindowDimensions()
@@ -41,18 +43,25 @@ const Login = () => {
 
   const [showPassword, setShowPassword] = useState(false)
   const dispatch = useDispatch()
-  const logLoad = useSelector(state => state?.user?.logLading)
+  const logLoad = useSelector(state => state?.user?.logLoading)
   const logModal = useSelector(state => state?.user?.logModalVisible)
-
+  // const logMessage = useSelector(state => state?.user?.loggedData?.message)
+  const [logMessage, setLogMessage] = useState(null)
   const HandleLogin = async () => {
     const logvalue = {
       email,
       password
     }
     const result = await dispatch(LoginUser(logvalue))
-
-    if (result.payload.success) {
+    let checkStorage
+    if (result?.payload?.success) {
       console.log('Registration Success:', result.data)
+      await AsyncStorage.setItem('auth_token', result?.payload?.token)
+      setLogMessage(result?.payload?.message)
+      checkStorage = await AsyncStorage.getItem('auth_token')
+
+      console.log('localToken:', checkStorage)
+
       setTimeout(() => {
         dispatch(userActions.hideLogModal())
         router.push({
@@ -60,12 +69,17 @@ const Login = () => {
         })
       }, 3000)
     } else {
+      setLogMessage(result?.payload)
       setTimeout(() => {
         dispatch(userActions.hideLogModal())
       }, 3000)
     }
   }
 
+  useEffect(() => {
+    console.log('email', email)
+    console.log('pass', password)
+  }, [email, password])
   useFocusEffect(
     useCallback(() => {
       // Reset animation position
@@ -84,7 +98,60 @@ const Login = () => {
   const navigation = useNavigation()
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, position: 'relative' }}>
+      {logLoad && logLoad ? (
+        <View
+          // style={{ backgroundColor: 'rgba(0,0,0,0.6)', width:"100%", height:"100%" }}
+          className=' absolute top-0 left-0 z-40 w-full h-full bg-blacktrans flex flex-row justify-center '
+        >
+          <View
+            style={{ position: 'absolute', top: '45%' }}
+            // className='absolute top-1/2'
+          >
+            <Icon.Loader
+              stroke={themeColors.bgColor(1)}
+              className=' w-32 h-32 animate-spin'
+            />
+          </View>
+        </View>
+      ) : (
+        ''
+      )}
+
+      {logModal ? (
+        <Modal visible={logModal} transparent={true} animationType='fade'>
+          <Pressable
+            onPress={() => dispatch(userActions.hideLogModal())}
+            style={{
+              flex: 1,
+              justifyContent: 'center',
+              alignItems: 'center',
+              position: 'relative',
+              backgroundColor: 'rgba(0,0,0,0.5)' // semi-transparent background
+            }}
+          >
+            <View
+              style={{
+                width: '80%',
+                height: '30%',
+                position: 'absolute',
+                backgroundColor: 'white',
+                borderRadius: 10,
+                padding: 20,
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              <Text className='text-gray-500 font-semibold text-xl'>
+                {logMessage || 'Unknown error'}
+              </Text>
+            </View>
+          </Pressable>
+        </Modal>
+      ) : (
+        ''
+      )}
+
       <ScrollView
         style={{
           display: 'flex',
@@ -163,12 +230,12 @@ const Login = () => {
                 className=' bg-primary py-8 my-6  relative rounded-lg flex justify-center items-center gap-4 '
               >
                 <TextInput
-                  onChange={setEmail}
+                  onChangeText={setEmail}
                   value={email}
                   style={[
                     styles.TextStyle,
                     {
-                      padding: isLargeScreen || isExtra || isSmall ? 8 : 20,
+                      padding: isLargeScreen || isExtra || isSmall ? 15 : 20,
                       outline: 'none'
                     }
                   ]}
@@ -194,6 +261,7 @@ const Login = () => {
                 </View>
                 <View className='w-[80%] p-5 rounded-lg bg-white'>
                   <TouchableOpacity
+                    onPress={() => HandleLogin()}
                     style={{
                       flexDirection: 'row',
                       alignItems: 'center',
@@ -207,7 +275,6 @@ const Login = () => {
                     <Text className='font-semibold text-white'>Login</Text>
                   </TouchableOpacity>
                 </View>
-
                 <View>
                   <Text className='pass'>Don't have an account? </Text>
                   <Pressable
@@ -283,6 +350,7 @@ const Login = () => {
 
                 <View className='w-[80%] p-5 rounded-lg bg-white'>
                   <TouchableOpacity
+                    onPress={() => HandleLogin()}
                     style={{
                       flexDirection: 'row',
                       alignItems: 'center',
