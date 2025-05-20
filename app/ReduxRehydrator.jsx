@@ -10,9 +10,9 @@ function ReduxRehydrator () {
 
   let LocalResturant
 
-  const RemoveItem = async () => {
-    await AsyncStorage.clear()
-  }
+  // const RemoveItem = async () => {
+  //   await AsyncStorage.clear()
+  // }
 
   const LocalAddResturants = async () => {
     try {
@@ -41,7 +41,7 @@ function ReduxRehydrator () {
   }
 
   useEffect(() => {
-    RemoveItem()
+    // RemoveItem()
 
     LocalAddResturants()
   }, [])

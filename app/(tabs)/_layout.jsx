@@ -116,7 +116,6 @@ export default function TabLayout () {
           tabBarStyle: { display: 'none' }
         }}
       />
-
       <Tabs.Screen
         name='AccountRecovery'
         options={{
@@ -128,7 +127,6 @@ export default function TabLayout () {
           tabBarStyle: { display: 'none' }
         }}
       />
-
       <Tabs.Screen
         name='VerifyEmail'
         options={{
@@ -140,6 +138,7 @@ export default function TabLayout () {
           tabBarStyle: { display: 'none' }
         }}
       />
+
     </Tabs>
   )
 }

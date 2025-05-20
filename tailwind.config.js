@@ -45,20 +45,23 @@ module.exports = {
         text: "rgba(192, 192, 192, 1)",
         textt: "rgba(192, 192, 192, 0.3)",
         border: "rgba(75, 85, 99, 1)",
-        placeHolder:"rgba(107, 114, 128, 0.6)",
-        radio:"rgba(107, 114, 128, 0.4)",
+        placeHolder: "rgba(107, 114, 128, 0.6)",
+        radio: "rgba(107, 114, 128, 0.4)",
         dryGray: "rgba(224, 213, 213, 1)",
         drkb: "rgba(27, 30, 50, 0.8)",
         drkb2: "rgba(27, 30, 50, 1)",
 
         // darkb:"rgba(27, 30, 50, 0.8)"
+        dash: "rgba(243,244,249)",
+        person: "rgba(213,217,220)",
+        activ: "rgb(251,146,60)",
 
         // **************
         primary: "rgb(229,231,235)",
         primary2: "rgba(255,255,255,0.5)",
         primaryActive: "rgb(251,146,60)",
         primaryLight: "rgb(251,146,60, 0.4)",
-        orderprep:"rgba(255, 202, 233, 1)",
+        orderprep: "rgba(255, 202, 233, 1)",
         trans: "rgba(30, 26, 26, 0.6)",
         transb: "rgba(30, 26, 26, 0.8)",
         trans2: "rgb(0,0,0,0.5)",

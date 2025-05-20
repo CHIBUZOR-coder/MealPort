@@ -63,15 +63,15 @@ export default function RestaurantScreen () {
     setlocalCart(data ? JSON.parse(data) : [])
   }
 
-  const RemoveItem = async () => {
-    // await AsyncStorage.clear()
-    await AsyncStorage.removeItem('storedFood')
-    await AsyncStorage.removeItem('quantity')
-  }
+  // const RemoveItem = async () => {
+  //   // await AsyncStorage.clear()
+  //   await AsyncStorage.removeItem('storedFood')
+  //   await AsyncStorage.removeItem('quantity')
+  // }
 
-  useEffect(() => {
-    RemoveItem()
-  }, [])
+  // useEffect(() => {
+  //   RemoveItem()
+  // }, [])
 
   useEffect(() => {
     logStoredCart()

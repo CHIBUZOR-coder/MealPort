@@ -17,7 +17,9 @@ const initialState = {
   logLoading: false,
   loggedData: [],
   logError: "",
+  token: "",
   logModalVisible: false,
+  expiresAt: "",
 };
 
 export const RegisterUser = createAsyncThunk(
@@ -102,6 +104,10 @@ const userSlice = createSlice({
     hideLogModal(state) {
       state.logModalVisible = false;
     },
+
+    setTokenExpiry(state, action) {
+      state.expiresAt = action.payload;
+    },
   },
 
   extraReducers: (builder) => {
@@ -142,6 +148,7 @@ const userSlice = createSlice({
         state.logLoading = false;
         state.logModalVisible = true;
         state.loggedData = action.payload;
+        state.token = action?.payload?.token;
         state.error = "";
       })
       .addCase(LoginUser.rejected, (state, action) => {

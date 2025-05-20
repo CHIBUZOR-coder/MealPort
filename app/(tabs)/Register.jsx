@@ -180,7 +180,7 @@ const Register = () => {
             </View>
           </View>
         ) : (
-          ''
+         <View></View>
         )}
 
         {modalVisible && (

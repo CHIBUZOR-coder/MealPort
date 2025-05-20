@@ -33,10 +33,14 @@ import * as Icon from 'react-native-feather'
 import { themeColor, themeColors } from '@/theme/index'
 import Categories from './Categories'
 import Featured from './Featured'
+import { jwtDecode } from 'jwt-decode'
 
 import { resturanActions } from '@/Redux/slices/restaurantSlice'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'expo-router'
+import { useSearchParams } from 'expo-router/build/hooks'
+import { useDispatch, useSelector } from 'react-redux'
+import { userActions } from '@/Redux/slices/UserSlice'
 
 export default function HomeScreen () {
   const { width } = useWindowDimensions() // Get screen width
@@ -44,6 +48,85 @@ export default function HomeScreen () {
 
   const router = useRouter()
   // const restaurants = use
+
+  const [token, setToken] = useState('')
+  const [expiresAt, setExpiresAt] = useState()
+  const dispatch = useDispatch()
+  const Token = useSelector(state => state?.user?.token)
+  // console.log('TOK:', Token)
+
+  const AddToken = async () => {
+    try {
+      if (Token && Token) {
+        console.log('tok:', Token)
+
+        await AsyncStorage.setItem('token', String(Token))
+        fetchToken()
+      } else {
+        console.log('token value is empty')
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  useEffect(() => {
+    if (Token) {
+      AddToken()
+    }
+  }, [Token]) // <-- run this effect when Token updates
+
+  const fetchToken = async () => {
+    const storedToken = await AsyncStorage.getItem('token')
+    if (storedToken) {
+      setToken(storedToken)
+    }
+  }
+
+  useEffect(() => {
+    fetchToken()
+  }, [])
+
+  useEffect(() => {
+    console.log('Tokk:', token)
+  }, [token])
+
+  const removeToken = async () => {
+    try {
+      const token = await AsyncStorage.removeItem('token')
+
+      if (!token) {
+        console.log('token value is removed')
+      } else {
+        console.log('Action failed')
+      }
+    } catch (error) {
+      console.log(error.message)
+    }
+  }
+
+  // useEffect(() => {
+  //   removeToken()
+  // }, [])
+
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     if (expiresAt) {
+  //       const now = new Date()
+  //       if (now >= expiresAt) {
+  //         console.log('🔴 Token has expired.')
+  //         AsyncStorage.removeItem('token')
+  //         dispatch(userActions.setToken(''))
+  //         router.replace('/Login')
+  //       }
+  //     } else {
+  //       console.log('Token has not yet expired')
+  //     }
+  //   }, 1000 * 10) // check every 10 seconds
+
+  //   return () => clearInterval(interval)
+  // }, [expiresAt])
+
   return (
     <SafeAreaView className=' flex-1' showsVerticalScrollIndicator={false}>
       <StatusBar backgroundColor='black' barStyle='white-content' />
@@ -78,7 +161,7 @@ export default function HomeScreen () {
               <TouchableOpacity
                 onPress={() =>
                   router.push({
-                    pathname: '/Login'
+                    pathname: token ? '/Dash' : '/Login'
                   })
                 }
                 className='p-1 slider rounded-full flex justify-center items-center h-10 w-10 cursor-pointer'

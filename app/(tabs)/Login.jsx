@@ -60,7 +60,7 @@ const Login = () => {
       setLogMessage(result?.payload?.message)
       checkStorage = await AsyncStorage.getItem('auth_token')
 
-      console.log('localToken:', checkStorage)
+      // console.log('localToken:', checkStorage)
 
       setTimeout(() => {
         dispatch(userActions.hideLogModal())
@@ -115,7 +115,7 @@ const Login = () => {
           </View>
         </View>
       ) : (
-        ''
+        <View></View>
       )}
 
       {logModal ? (
