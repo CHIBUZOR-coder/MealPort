@@ -18,8 +18,10 @@ const initialState = {
   loggedData: [],
   logError: "",
   token: "",
+  decoded: "",
   logModalVisible: false,
   expiresAt: "",
+  userInfo: {},
 };
 
 export const RegisterUser = createAsyncThunk(
@@ -104,7 +106,12 @@ const userSlice = createSlice({
     hideLogModal(state) {
       state.logModalVisible = false;
     },
-
+    SetDedodedToken(state, action) {
+      state.decoded = action.payload;
+    },
+    SeUserInfo(state, action) {
+      state.userInfo = action?.payload
+    },
     setTokenExpiry(state, action) {
       state.expiresAt = action.payload;
     },

@@ -385,7 +385,7 @@ export default function RestaurantScreen () {
 
   return (
     <View style={{ flex: 1, backgroundColor: 'white', position: 'relative' }}>
-      <StatusBar backgroundColor='black' barStyle='white-content' />
+      {/* <StatusBar backgroundColor='black' barStyle='white-content' /> */}
       {/* Notification********************* */}
 
       {toggle && (
@@ -403,15 +403,15 @@ export default function RestaurantScreen () {
             style={{ backgroundColor: themeColors.bgColor(1) }}
             className=' p-2  rounded-3xl w-[80%]  z-50 flex flex-row justify-between items-center'
           >
-            <View className=' rounded-full flex flex-row justify-center items-center h-12 w-12 bg-primary2 '>
-              <Text className=' p-2 text-white  font-semibold '>
+            <View className='flex flex-row items-center justify-center w-12 h-12 rounded-full  bg-primary2'>
+              <Text className='p-2 font-semibold text-white '>
                 {(CartCount && CartCount) || 0}
               </Text>
             </View>
-            <Text className=' p-2 text-white font-semibold flex justify-center items-center'>
+            <Text className='flex items-center justify-center p-2 font-semibold text-white '>
               View Cart
             </Text>
-            <Text className=' p-2 text-white font-semibold flex justify-center items-center '>
+            <Text className='flex items-center justify-center p-2 font-semibold text-white '>
               ${Total}
             </Text>
           </TouchableOpacity>
@@ -441,7 +441,7 @@ export default function RestaurantScreen () {
             HandleHideCart()
             HandleToggleFalse()
           }}
-          className='absolute rounded-full p-2  shadow-lg   z-10'
+          className='absolute z-10 p-2 rounded-full shadow-lg'
         >
           <Icon.ArrowLeft strokeWidth={3} stroke={'white'} />
         </TouchableOpacity>
@@ -456,7 +456,7 @@ export default function RestaurantScreen () {
               position: 'absolute',
               gap: 5
             }}
-            className='  w-full h-1/2 absolute flex  flex-col justify-center items-center p-2 '
+            className='absolute flex flex-col items-center justify-center w-full p-2  h-1/2'
           >
             <FlatList
               data={storedFood}
@@ -472,9 +472,9 @@ export default function RestaurantScreen () {
                     borderRadius: 8,
                     overflow: 'hidden'
                   }}
-                  className='bg-white  flex flex-row justify-between items-center gap-3 shadow-lg'
+                  className='flex flex-row items-center justify-between gap-3 bg-white shadow-lg'
                 >
-                  <View className='flex flex-row justify-center gap-2 items-center'>
+                  <View className='flex flex-row items-center justify-center gap-2'>
                     <View
                       style={{
                         height: isLargeScreen ? 100 : 70,
@@ -482,7 +482,7 @@ export default function RestaurantScreen () {
                         // borderRadius: 12,
                         // overflow: 'hidden'
                       }}
-                      className='rounded-full h-10 w-10 overflow-hidden '
+                      className='w-10 h-10 overflow-hidden rounded-full '
                     >
                       <Image
                         style={{
@@ -501,7 +501,7 @@ export default function RestaurantScreen () {
                     </Text>
                   </View>
 
-                  <View className='flex flex-row justify-center gap-2 items-center'>
+                  <View className='flex flex-row items-center justify-center gap-2'>
                     <Text
                       style={{ fontSize: isExtraSmall ? 10 : 15 }}
                       className='font-semibold'
@@ -517,7 +517,7 @@ export default function RestaurantScreen () {
                       style={{
                         backgroundColor: themeColors.bgColor(1)
                       }}
-                      className='rounded-full w-10 h-10 justify-center items-center'
+                      className='items-center justify-center w-10 h-10 rounded-full'
                     >
                       <Icon.Minus
                         height={20}
@@ -532,8 +532,8 @@ export default function RestaurantScreen () {
             />
           </View>
         ) : (
-          <View className='w-full   absolute top-1/2 transform -translate-y-1/2 left-0 right-0 flex justify-center items-center'>
-            <Text className='font-semibold text-2xl '>No Items in Cart</Text>
+          <View className='absolute left-0 right-0 flex items-center justify-center w-full transform -translate-y-1/2 top-1/2'>
+            <Text className='text-2xl font-semibold '>No Items in Cart</Text>
           </View>
         )}
 
@@ -546,7 +546,7 @@ export default function RestaurantScreen () {
 
             position: 'absolute'
           }}
-          className='w-full flex flex-row justify-center items-center p-2 absolute top-5 left-0 '
+          className='absolute left-0 flex flex-row items-center justify-center w-full p-2 top-5 '
         >
           <Text style={{ fontSize: 25 }} className='font-semibold '>
             Your Orders
@@ -555,9 +555,9 @@ export default function RestaurantScreen () {
 
         <View
           style={{ padding: 20 }}
-          className='absolute bill  left-0 rounded-tr-3xl   rounded-tl-3xl bg-primaryLight w-full'
+          className='absolute left-0 w-full bill rounded-tr-3xl rounded-tl-3xl bg-primaryLight'
         >
-          <View className=' flex flex-col gap-4 '>
+          <View className='flex flex-col gap-4 '>
             <View className='flex flex-row justify-between '>
               <Text>Subtotal</Text>
               <Text>{Total && Total}</Text>
@@ -594,7 +594,7 @@ export default function RestaurantScreen () {
                   alignItems: 'center'
                 }}
               >
-                <Text className='p-2 text-white font-semibold '>
+                <Text className='p-2 font-semibold text-white '>
                   Place Order
                 </Text>
               </View>
@@ -628,7 +628,7 @@ export default function RestaurantScreen () {
                   HandleHideCart()
                   HandleToggleFalse()
                 }}
-                className='absolute rounded-full p-2 bg-use2 shadow-lg  top-5 left-5 z-10'
+                className='absolute z-10 p-2 rounded-full shadow-lg bg-use2 top-5 left-5'
               >
                 <Icon.ArrowLeft
                   strokeWidth={3}
@@ -647,15 +647,15 @@ export default function RestaurantScreen () {
             <View
               className={`bg-white -mt-16 rounded-tr-3xl   rounded-tl-3xl `}
             >
-              <View className=' w-full p-4 flex flex-col gap-3 '>
-                <Text className='font-bold  w-full'>{item?.name}</Text>
-                <View className='flex justify-start flex-col gap-4 '>
-                  <Text className='font-bold  w-full flex justify-start items-center gap-3 b'>
+              <View className='flex flex-col w-full gap-3 p-4 '>
+                <Text className='w-full font-bold'>{item?.name}</Text>
+                <View className='flex flex-col justify-start gap-4 '>
+                  <Text className='flex items-center justify-start w-full gap-3 font-bold b'>
                     <Text>{item?.star}</Text>
                     <Text className='text-gray-500'>|</Text>
                     <Text className='text-gray-500'> Fast Food</Text>
                   </Text>
-                  <View className='flex w-1/2 justify-start flex-row items-center gap-3'>
+                  <View className='flex flex-row items-center justify-start w-1/2 gap-3'>
                     <Icon.MapPin
                       height={'15'}
                       width={'15'}
@@ -668,10 +668,10 @@ export default function RestaurantScreen () {
                   </View>
                 </View>
                 <Text className='text-gray-500 '>{item?.description}</Text>
-                <Text className='text-gray-500 text-lg'>{tittle}</Text>
+                <Text className='text-lg text-gray-500'>{tittle}</Text>
               </View>
             </View>
-            <View className='p-2 flex-1'>
+            <View className='flex-1 p-2'>
               <View className='px-4 mt-6 '>
                 <Text className='text-lg font-semibold '>Menu</Text>
               </View>
@@ -697,7 +697,7 @@ export default function RestaurantScreen () {
                           },
                           shadowStyle // Spread the shadowStyle here
                         ]}
-                        className='p-2 bg-white relative par flex flex-row justify-between  '
+                        className='relative flex flex-row justify-between p-2 bg-white par '
                       >
                         <View
                           style={{
@@ -709,7 +709,7 @@ export default function RestaurantScreen () {
                           className='bg-blue-500 rounded-xl'
                         >
                           <Image
-                            className=' w-full '
+                            className='w-full '
                             style={{
                               height: isLargeScreen ? 100 : 100,
                               width: isLargeScreen ? 200 : 100,
@@ -718,7 +718,7 @@ export default function RestaurantScreen () {
                             source={dish.image}
                           />
                         </View>
-                        <View className='p-2 flex-1 flex flex-col gap-5'>
+                        <View className='flex flex-col flex-1 gap-5 p-2'>
                           <View>
                             <Text
                               style={{
@@ -735,8 +735,8 @@ export default function RestaurantScreen () {
                             <Text>${dish.price}</Text>
                           </View>
 
-                          <View className=' flex justify-end  flex-1 items-end '>
-                            <View className='flex flex-row justify-center gap-3 items-center '>
+                          <View className='flex items-end justify-end flex-1 '>
+                            <View className='flex flex-row items-center justify-center gap-3 '>
                               <TouchableOpacity
                                 onPress={() => {
                                   HandleDeleteFromAddToCart(dish, 'sub')
@@ -746,14 +746,14 @@ export default function RestaurantScreen () {
                                 style={{
                                   backgroundColor: themeColors.bgColor(1)
                                 }}
-                                className='rounded-full w-10 h-10 justify-center items-center'
+                                className='items-center justify-center w-10 h-10 rounded-full'
                               >
                                 {itemLoading &&
                                 itemLoading[dish?.id] === true &&
                                 Action &&
                                 Action === 'sub' ? (
                                   <>
-                                    <Icon.Loader className=' w-5 h-5 animate-spin' />
+                                    <Icon.Loader className='w-5 h-5  animate-spin' />
                                   </>
                                 ) : (
                                   <Icon.Minus
@@ -765,7 +765,7 @@ export default function RestaurantScreen () {
                                 )}
                               </TouchableOpacity>
 
-                              <Text className='font-semibold w-5 text-gray-500'>
+                              <Text className='w-5 font-semibold text-gray-500'>
                                 {quantity[dish.id] || 0}
                               </Text>
                               <TouchableOpacity
@@ -781,14 +781,14 @@ export default function RestaurantScreen () {
                                 style={{
                                   backgroundColor: themeColors.bgColor(1)
                                 }}
-                                className='rounded-full w-10 h-10 justify-center items-center'
+                                className='items-center justify-center w-10 h-10 rounded-full'
                               >
                                 {itemLoading &&
                                 itemLoading[dish?.id] === true &&
                                 Action &&
                                 Action === 'add' ? (
                                   <>
-                                    <Icon.Loader className=' w-5 h-5 animate-spin' />
+                                    <Icon.Loader className='w-5 h-5  animate-spin' />
                                   </>
                                 ) : (
                                   <Icon.Plus
@@ -807,7 +807,7 @@ export default function RestaurantScreen () {
                 </View>
               ) : (
                 <>
-                  <View className='flex  justify-center flat  overflow-auto'>
+                  <View className='flex justify-center overflow-auto flat'>
                     <FlatList
                       style={{ minHeight: item && item.length * 42 }}
                       key={
@@ -834,7 +834,7 @@ export default function RestaurantScreen () {
                             },
                             shadowStyle // Spread the shadowStyle here
                           ]}
-                          className='p-2 bg-white relative par flex flex-row justify-between  '
+                          className='relative flex flex-row justify-between p-2 bg-white par '
                         >
                           <View
                             style={{
@@ -846,7 +846,7 @@ export default function RestaurantScreen () {
                             className='bg-blue-500 rounded-xl'
                           >
                             <Image
-                              className=' w-full '
+                              className='w-full '
                               style={{
                                 height: isLargeScreen ? 100 : 100,
                                 width: isLargeScreen ? 200 : 100,
@@ -855,7 +855,7 @@ export default function RestaurantScreen () {
                               source={dish.image}
                             />
                           </View>
-                          <View className='p-2 flex-1 flex flex-col gap-5'>
+                          <View className='flex flex-col flex-1 gap-5 p-2'>
                             <View>
                               <Text
                                 style={{
@@ -875,14 +875,14 @@ export default function RestaurantScreen () {
                                   fontFamily: 'Poppins_400Regular',
                                   fontSize: 15
                                 }}
-                                className='font-bold mt-4'
+                                className='mt-4 font-bold'
                               >
                                 ${dish.price}
                               </Text>
                             </View>
 
-                            <View className=' flex justify-end  flex-1 items-end '>
-                              <View className='flex flex-row justify-center gap-3 items-center '>
+                            <View className='flex items-end justify-end flex-1 '>
+                              <View className='flex flex-row items-center justify-center gap-3 '>
                                 <TouchableOpacity
                                   onPress={() => {
                                     HandleDeleteFromAddToCart(dish, 'sub')
@@ -891,14 +891,14 @@ export default function RestaurantScreen () {
                                   style={{
                                     backgroundColor: themeColors.bgColor(1)
                                   }}
-                                  className='rounded-full w-10 h-10 justify-center items-center'
+                                  className='items-center justify-center w-10 h-10 rounded-full'
                                 >
                                   {itemLoading &&
                                   itemLoading[dish?.id] === true &&
                                   Action &&
                                   Action === 'sub' ? (
                                     <>
-                                      <Icon.Loader className=' w-5 h-5 animate-spin' />
+                                      <Icon.Loader className='w-5 h-5  animate-spin' />
                                     </>
                                   ) : (
                                     <Icon.Minus
@@ -910,7 +910,7 @@ export default function RestaurantScreen () {
                                   )}
                                 </TouchableOpacity>
 
-                                <Text className='font-semibold w-5 text-center text-gray-500'>
+                                <Text className='w-5 font-semibold text-center text-gray-500'>
                                   {quantity[dish.id] || 0}
                                 </Text>
                                 <TouchableOpacity
@@ -921,14 +921,14 @@ export default function RestaurantScreen () {
                                   style={{
                                     backgroundColor: themeColors.bgColor(1)
                                   }}
-                                  className='rounded-full w-10 h-10 justify-center items-center'
+                                  className='items-center justify-center w-10 h-10 rounded-full'
                                 >
                                   {itemLoading &&
                                   itemLoading[dish?.id] === true &&
                                   Action &&
                                   Action === 'add' ? (
                                     <>
-                                      <Icon.Loader className=' w-5 h-5 animate-spin' />
+                                      <Icon.Loader className='w-5 h-5  animate-spin' />
                                     </>
                                   ) : (
                                     <Icon.Plus
