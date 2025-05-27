@@ -22,6 +22,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import Load from './Load'
 import { useDispatch, useSelector } from 'react-redux'
 import { userActions } from '@/Redux/slices/UserSlice'
+import { ScrollView } from 'react-native-virtualized-view'
 
 const storeDecodedFields = async dec => {
   try {
@@ -192,7 +193,10 @@ const index = () => {
   // }
 
   return (
-    <SafeAreaView  edges={['top', 'left', 'right']} style={{ backgroundColor: 'white', flex: 1 }}>
+    <SafeAreaView
+      edges={['top', 'left', 'right']}
+      style={{ backgroundColor: 'white', flex: 1 }}
+    >
       {/* <StatusBar backgroundColor='dark' barStyle='white-content' /> */}
 
       <Animated.View
@@ -200,7 +204,6 @@ const index = () => {
           loading === true ? 'flex justify-center items-center' : ''
         }`}
         style={{
-       
           flex: 1,
           backgroundColor: 'rgb(229, 231, 235)',
           position: 'relative',
@@ -210,10 +213,9 @@ const index = () => {
           transform: [{ translateX: slideAnim }]
         }}
       >
-        <View className='relative w-full'>{loading ? <Load /> : render}</View>
+        <>{loading ? <Load /> : render}</>
 
         <View
-         
           className={` bg-white absolute w-full p-5 bottom-0 left-0 ${
             loading === true ? '' : ''
           } flex flex-row justify-between gap-4 `}

@@ -79,8 +79,8 @@ const Account = () => {
                   />
                 ) : (
                   <Icon.User
-                    height={'25'}
-                    width={'25'}
+                    height={'20'}
+                    width={'20'}
                     strokeWidth={2.5}
                     stroke={'white'}
                   />
@@ -91,7 +91,7 @@ const Account = () => {
               {/* hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh>>>> subChild(name/email) */}
               <View className='flex flex-col justify-center item-center'>
                 <Text className='text-lg font-semibold'>
-                  Hi, {userInfo?.firstname } {userInfo?.lastname}
+                  Hi, {userInfo?.firstname} {userInfo?.lastname}
                 </Text>
                 <Text className='text-gray-500 text-small'>
                   {userInfo?.email}
@@ -202,23 +202,23 @@ const Account = () => {
           <View className='flex flex-col items-center justify-center w-full gap-12 mt-8'>
             {/* hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh>>  child(AccoutInfo) ********************/}
             <View
-              style={{ overflow: 'hidden' }}
-              className='flex flex-row justify-between w-full p-4 overflow-hidden bg-white rounded-md shadow-md item-center'
+              style={{ overflow: 'hidden', ...styles.shadow }}
+              className='flex flex-row justify-between w-full p-4 overflow-hidden bg-white rounded-md  item-center'
             >
               {/* hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh>> subChild(user icon) */}
               <View
                 // style={{ borderRadius: '100%', height: 20, width: 20 }}
-                className={`bg-person relative rounded-full  p-6 self-start`}
+                className={`bg-person relative rounded-full  p-2 self-start`}
               >
                 {userInfo?.image ? (
                   <Image
-                    style={{ height: 30, width: 30, resizeMode: 'cover' }}
+                    style={{ height: 45, width: 45, resizeMode: 'cover' }}
                     source={{ uri: userInfo?.image }}
                   />
                 ) : (
                   <Icon.User
-                    height={'25'}
-                    width={'25'}
+                    height={'35'}
+                    width={'35'}
                     strokeWidth={2.5}
                     stroke={'white'}
                   />
@@ -229,7 +229,8 @@ const Account = () => {
               {/* hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh>>>> subChild(name/email) */}
               <View className='flex flex-col justify-center item-center'>
                 <Text className='text-lg font-semibold'>
-                  Hi, {userInfo?.firstname || 'Chibuzor'} {userInfo?.lastname || 'Emekalam'}
+                  Hi, {userInfo?.firstname || 'Chibuzor'}{' '}
+                  {userInfo?.lastname || 'Emekalam'}
                 </Text>
                 <Text className='text-gray-500 text-small'>
                   {userInfo?.email || 'chibuzormekalam@gmail.com'}
@@ -243,8 +244,8 @@ const Account = () => {
                 className='flex flex-row items-center self-center justify-between '
               >
                 <Icon.LogOut
-                  height={'35'}
-                  width={'35'}
+                  height={'25'}
+                  width={'25'}
                   strokeWidth={2.5}
                   stroke={'rgba(107, 114, 128, .5)'}
                 />
@@ -263,7 +264,7 @@ const Account = () => {
                   Edit Information
                 </Text>
               </View>
-              <View className='flex flex-row justify-between w-full p-4 bg-white rounded-md shade'>
+              <View style={{...styles.shadow}} className='flex flex-row justify-between w-full p-4 bg-white rounded-md shade'>
                 <Text className='text-lg font-bold'>Edit Account</Text>
 
                 <View>
@@ -284,7 +285,7 @@ const Account = () => {
                 </Text>
               </View>
               <View className='flex flex-col gap-[2px] justify-center items-center w-full shade'>
-                <View className='flex flex-row justify-between w-full p-4 bg-white rounded-tr-md rounded-tl-md'>
+                <View style={{...styles.topShadow}} className='flex flex-row justify-between w-full p-4 bg-white rounded-tr-md rounded-tl-md'>
                   <View className='flex flex-row items-center justify-center gap-4'>
                     <Icon.Sun
                       stroke={'rgba(107, 114, 128, .5)'}
@@ -302,7 +303,7 @@ const Account = () => {
                     />
                   </View>
                 </View>
-                <View className='flex flex-row justify-between w-full p-4 bg-white rounded-br-md rounded-bl-md'>
+                <View style={{...styles.bottomShadow}} className='flex flex-row justify-between w-full p-4 bg-white rounded-br-md rounded-bl-md'>
                   <View className='flex flex-row items-center justify-center gap-4'>
                     <Icon.Globe
                       stroke={'rgba(107, 114, 128, .5)'}
@@ -332,4 +333,29 @@ const Account = () => {
 
 export default Account
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  shadow: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5
+  },
+  topShadow: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -5 }, // Negative height pushes shadow up
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5, // Required for Android, but affects all sides
+    backgroundColor: 'white' // Needed to visualize the shadow properly
+  },
+  bottomShadow: {
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 5 }, // Negative height pushes shadow up
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5, // Required for Android, but affects all sides
+    backgroundColor: 'white' // Needed to visualize the shadow properly
+  }
+})
+
