@@ -178,9 +178,9 @@ const Dashboard = () => {
     >
       <View
         // style={{ backgroundColor: 'yellow' }}
-        className='flex justify-center w-full   '
+        className='flex justify-center w-full '
       >
-        <Text style={{ ...styles.font }} className='text-lg  font-bold'>
+        <Text style={{ ...styles.font }} className='text-lg font-bold'>
           Hi, {userInfo?.name || 'Chbuzor'} !
         </Text>
         <Text
@@ -193,7 +193,7 @@ const Dashboard = () => {
 
       <View
         // style={{ backgroundColor: 'blue',  }}
-        className='w-full flex  flex-row  gap-6 justify-center items-center pt-5 '
+        className='flex flex-row items-center justify-center w-full gap-6 pt-5 '
       >
         <View
           style={styles.shadow}
@@ -225,7 +225,7 @@ const Dashboard = () => {
                 height: getChildHight(),
                 width: getChildHight()
               }}
-              className='flex rounded-full   items-center justify-center '
+              className='flex items-center justify-center rounded-full '
             >
               <Icon.Truck stroke={'white'} strokeWidth={2.5} />
             </View>
@@ -246,18 +246,18 @@ const Dashboard = () => {
                 height: getChildHight(),
                 width: getChildHight()
               }}
-              className='flex rounded-full   items-center justify-center '
+              className='flex items-center justify-center rounded-full '
             >
               <Icon.Truck stroke={'white'} strokeWidth={2.5} />
             </View>
           </View>
 
-          <View className='absolute bottom-0 left-0 right-0 flex p-4 md:p-6 rounded-lg '>
-            <Text className=' text-xl font-semibold text-gray-500'>
+          <View className='absolute bottom-0 left-0 right-0 flex p-4 rounded-lg md:p-6 '>
+            <Text className='text-xl font-semibold text-gray-500 '>
               {delivery?.length}
             </Text>
             <View style={styles.status}>
-              <Text className=' font-bold text-gray-500'>Delivered</Text>
+              <Text className='font-bold text-gray-500 '>Delivered</Text>
               <Icon.ChevronRight
                 stroke={'rgba(107, 114, 128, .5)'}
                 strokeWidth={2.5}
@@ -295,18 +295,18 @@ const Dashboard = () => {
                 height: getChildHight(),
                 width: getChildHight()
               }}
-              className='flex rounded-full   items-center justify-center '
+              className='flex items-center justify-center rounded-full '
             >
               <Icon.Truck stroke={'white'} strokeWidth={2.5} />
             </View>
           </View>
 
-          <View className='absolute bottom-0 left-0 right-0 flex p-4 md:p-6 rounded-lg '>
-            <Text className=' text-xl font-semibold text-gray-500'>
+          <View className='absolute bottom-0 left-0 right-0 flex p-4 rounded-lg md:p-6 '>
+            <Text className='text-xl font-semibold text-gray-500 '>
               {pending?.length}
             </Text>
             <View style={styles.status}>
-              <Text className=' font-bold text-gray-500'>Pending</Text>
+              <Text className='font-bold text-gray-500 '>Pending</Text>
               <Icon.ChevronRight
                 stroke={'rgba(107, 114, 128, .5)'}
                 strokeWidth={2.5}
@@ -317,32 +317,46 @@ const Dashboard = () => {
       </View>
 
       <View className='pt-8 pb-2'>
-        <Text style={{}} className=' text-lg  font-bold '>
+        <Text style={{}} className='text-lg font-bold '>
           Delivered
         </Text>
       </View>
-      <ScrollView style={{ height: 355 }} className='w-full   '>
+      <ScrollView style={{ height: 355 }} className='w-full '>
         {delivery.length > 0 ? (
           <View className='flex flex-col gap-4 '>
             {delivery.map((item, index) => (
               <View
                 key={index}
                 style={styles.shadow}
-                className='flex  items-center mb-2  bg-white rounded-lg px-5 py-[1.5rem] '
+                className='flex flex-col  items-center mb-2 relative bg-white rounded-lg px-3 md:px-3 py-[1.5rem] '
               >
-                <View className='flex flex-row justify-between items-center w-full '>
-                  <View></View>
-                  <View className='w-70%'>
-                    <View className=' w-full flex flex-row justify-between items-center'>
-                      <Text
-                        style={{
-                          ...styles.font,
-                          color: themeColors.bgColor(1)
-                        }}
-                        className='text-blue-500 font-bold'
+                <View className='flex items-center w-full gap-2 '>
+                  <View className='flex flex-row items-center justify-between w-full '>
+                    <View className='flex flex-row items-center gap-[5px] w-[50%] '>
+                      <View
+                        // style={{ backgroundColor: themeColors.bgColor(1) }}
+                        className='flex items-center justify-center w-6 h-6 rounded-full bg-person '
                       >
-                        #{item.dleveryId}
-                      </Text>
+                        <View
+                          style={{ backgroundColor: themeColors.bgColor(1) }}
+                          className='w-[10px] h-[10px] rounded-full h10'
+                        ></View>
+                      </View>
+
+                      <View>
+                        <Text
+                          style={{
+                            ...styles.font,
+                            color: themeColors.bgColor(1)
+                          }}
+                          className='font-bold text-blue-500'
+                        >
+                          #{item.dleveryId}
+                        </Text>
+                      </View>
+                    </View>
+
+                    <View>
                       <Text
                         style={{
                           ...styles.font,
@@ -353,29 +367,29 @@ const Dashboard = () => {
                         ${item.amount}
                       </Text>
                     </View>
+                  </View>
+                  <View className='flex w-full '>
                     <Text className='text-lg font-semibold'>
                       {item.quantity} x {item.name}
                     </Text>
 
-                    <Text className=' text-gray-500 text-sm'>
+                    <Text className='text-sm text-gray-500 '>
                       {item.paymentType}
                     </Text>
                   </View>
                 </View>
-
-                {item.icon}
               </View>
             ))}
           </View>
         ) : (
-          <View className='flex bg-white rounded-lg items-center justify-center h-64 w-full'>
+          <View className='flex items-center justify-center w-full h-64 bg-white rounded-lg'>
             <Image
               source={require('@/assets/images/deli.jpg')}
               style={{ width: 100, height: 100 }}
             />
             <Text
               style={{ ...styles.font, color: '#6B7280' }}
-              className='text-center text-lg text-gray-500'
+              className='text-lg text-center text-gray-500'
             >
               No deliveries available
             </Text>

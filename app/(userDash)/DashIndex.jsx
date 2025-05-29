@@ -16,13 +16,14 @@ import { themeColors } from '@/theme'
 import { useFocusEffect, useRouter } from 'expo-router'
 import Account from './Account'
 import Dashboard from './Dashboard'
-import Orders from './Orders'
+import Orders from './Deliveries'
 import Notifications from './Notifications'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import Load from './Load'
 import { useDispatch, useSelector } from 'react-redux'
 import { userActions } from '@/Redux/slices/UserSlice'
 import { ScrollView } from 'react-native-virtualized-view'
+import Deliveries from './Deliveries'
 
 const storeDecodedFields = async dec => {
   try {
@@ -103,7 +104,7 @@ const index = () => {
     setActive(page.id)
     if (page.text === 'Dash') {
       setRender(<Dashboard />)
-    } else if (page.text === 'Orders') {
+    } else if (page.text === 'Deliveries') {
       setRender(<Orders />)
     } else if (page.text === 'Notifications') {
       setRender(<Notifications />)
@@ -124,8 +125,8 @@ const index = () => {
     setActive(id)
     if (page === 'Dash') {
       setRender(<Dashboard />)
-    } else if (page === 'Orders') {
-      setRender(<Orders />)
+    } else if (page === 'Deliveries') {
+      setRender(<Deliveries />)
     } else if (page === 'Notifications') {
       setRender(<Notifications />)
     } else if (page === 'Account') {
@@ -169,7 +170,7 @@ const index = () => {
     },
     {
       icon: <Icon.Truck stroke={'white'} strokeWidth={2.5} />,
-      text: 'Orders',
+      text: 'Deliveries',
       id: '2'
     },
     {
@@ -225,21 +226,27 @@ const index = () => {
           ) : (
             <>
               {pages.map((page, i) => (
-                <TouchableOpacity
+                <View
                   key={page.id}
-                  onPress={() => {
-                    HandleSetActive(page)
-                  }}
-                  className={`rounded-full ${
-                    active === page.id
-                      ? 'bg-activ'
-                      : loading === true
-                      ? 'bg-person'
-                      : 'bg-person'
-                  }  self-start p-4`}
+                  className='flex items-center justify-center gap-2 '
                 >
-                  {page.icon}
-                </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      HandleSetActive(page)
+                    }}
+                    className={`rounded-full ${
+                      active === page.id
+                        ? 'bg-activ'
+                        : loading === true
+                        ? 'bg-person'
+                        : 'bg-person'
+                    } flex justify-center items-center   p-4`}
+                  >
+                    <Text>{page.icon}</Text>
+                  </TouchableOpacity>
+
+                  <Text className='font-semibold text-gray-500'>{page.text}</Text>
+                </View>
               ))}
             </>
           )}
