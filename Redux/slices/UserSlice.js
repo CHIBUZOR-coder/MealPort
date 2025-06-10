@@ -46,7 +46,7 @@ export const VerifyUser = createAsyncThunk(
   "user/verification",
   async (token, { rejectWithValue }) => {
     try {
-      const res = await fetch("http://localhost:5000/verifyEmail", {
+      const res = await fetch("http://192.168.33.142:5000/verifyEmail", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

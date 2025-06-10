@@ -60,6 +60,7 @@ module.exports = {
         primary: "rgb(229,231,235)",
         primary2: "rgba(255,255,255,0.5)",
         primaryActive: "rgb(251,146,60)",
+        theme: "rgba(251,146,60, 1)",
         primaryLight: "rgb(251,146,60, 0.4)",
         orderprep: "rgba(255, 202, 233, 1)",
         trans: "rgba(30, 26, 26, 0.6)",

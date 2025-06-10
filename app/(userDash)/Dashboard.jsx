@@ -5,19 +5,28 @@ import {
   Text,
   useWindowDimensions,
   View,
-  Image
+  Image,
+  TouchableOpacity
 } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useFocusEffect, useRouter } from 'expo-router'
 import * as Icon from 'react-native-feather'
 import { themeColors } from '@/theme'
 import { Poppins_400Regular, useFonts } from '@expo-google-fonts/poppins'
 import { ScrollView } from 'react-native-virtualized-view'
+import { dashActions } from '@/Redux/slices/dashSlice'
 
 const Dashboard = () => {
   const userInfo = useSelector(state => state?.user?.userInfo)
   const { width } = useWindowDimensions()
+  const dispatch = useDispatch()
+  const DModalShow = () => {
+    dispatch(dashActions.showDelivery())
+  }
+  const PModalShow = () => {
+    dispatch(dashActions.showPending())
+  }
 
   const getHeight = () => {
     if (isExtra) return 120
@@ -161,6 +170,7 @@ const Dashboard = () => {
 
   const date = new Date()
 
+
   useEffect(() => {
     console.log('date:', date)
     // if (!loaded) return <Text className='font-semibold'> Loading...</Text>
@@ -253,15 +263,26 @@ const Dashboard = () => {
           </View>
 
           <View className='absolute bottom-0 left-0 right-0 flex p-4 rounded-lg md:p-6 '>
-            <Text className='text-xl font-semibold text-gray-500 '>
+            <Text
+              style={{ color: themeColors.bgColor(1) }}
+              className='text-3xl font-bold '
+            >
               {delivery?.length}
             </Text>
             <View style={styles.status}>
               <Text className='font-bold text-gray-500 '>Delivered</Text>
-              <Icon.ChevronRight
-                stroke={'rgba(107, 114, 128, .5)'}
-                strokeWidth={2.5}
-              />
+              <TouchableOpacity
+                onPress={() => {
+                  router.push({
+                    pathname: '/Deliverd'
+                  })
+                }}
+              >
+                <Icon.ChevronRight
+                  stroke={'rgba(107, 114, 128, .5)'}
+                  strokeWidth={4}
+                />
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -302,15 +323,23 @@ const Dashboard = () => {
           </View>
 
           <View className='absolute bottom-0 left-0 right-0 flex p-4 rounded-lg md:p-6 '>
-            <Text className='text-xl font-semibold text-gray-500 '>
+            <Text style={{ color: 'red' }} className='text-3xl font-bold'>
               {pending?.length}
             </Text>
             <View style={styles.status}>
               <Text className='font-bold text-gray-500 '>Pending</Text>
-              <Icon.ChevronRight
-                stroke={'rgba(107, 114, 128, .5)'}
-                strokeWidth={2.5}
-              />
+              <TouchableOpacity
+                onPress={() => {
+                  router.push({
+                    pathname: '/Pending'
+                  })
+                }}
+              >
+                <Icon.ChevronRight
+                  stroke={'rgba(107, 114, 128, .5)'}
+                  strokeWidth={4}
+                />
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -321,11 +350,16 @@ const Dashboard = () => {
           Delivered
         </Text>
       </View>
-      <ScrollView style={{ height: 355 }} className='w-full '>
+      <ScrollView style={{ height:isLargeScreen? 440 : 330 }} className='w-full '>
         {delivery.length > 0 ? (
           <View className='flex flex-col gap-4 '>
             {delivery.map((item, index) => (
-              <View
+              <TouchableOpacity
+                onPress={() => {
+                  router.push({
+                    pathname: '/DeliveryDetails'
+                  })
+                }}
                 key={index}
                 style={styles.shadow}
                 className='flex flex-col  items-center mb-2 relative bg-white rounded-lg px-3 md:px-3 py-[1.5rem] '
@@ -378,7 +412,7 @@ const Dashboard = () => {
                     </Text>
                   </View>
                 </View>
-              </View>
+              </TouchableOpacity>
             ))}
           </View>
         ) : (

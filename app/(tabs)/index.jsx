@@ -185,8 +185,8 @@ export default function HomeScreen () {
               <TouchableOpacity
                 onPress={() =>
                   router.push({
-                    // pathname: token ? '/DashIndex' : '/Login'
-                    pathname: '/DashIndex'
+                    pathname: token ? '/DashIndex' : '/Login'
+                    // pathname: '/DashIndex'
                   })
                 }
                 className='flex items-center justify-center w-10 h-10 p-1 rounded-full cursor-pointer slider'

@@ -1,24 +1,13 @@
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React, { useState } from "react";
-import * as Icon from "react-native-feather";
-import { useDispatch } from "react-redux";
-import { dashActions } from "@/Redux/slices/dashSlice";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
 import { ScrollView } from "react-native-virtualized-view";
 import { themeColors } from "@/theme";
 import { useRouter } from "expo-router";
+import * as Icon from "react-native-feather";
 
-const Deliveries = () => {
-  const [PshowModal, setPshowModal] = useState(false);
-
-  const dispatch = useDispatch();
-
-  const DModalShow = () => {
-    dispatch(dashActions.showDelivery());
-  };
-  const PModalShow = () => {
-    dispatch(dashActions.showPending());
-  };
-
+const Pending = () => {
   const pending = [
     {
       dleveryId: 144,
@@ -53,37 +42,8 @@ const Deliveries = () => {
       paymentType: "Cash on Delivery",
       status: "pending",
     },
-  ];
-
-  // deliveries
-  const delivered = [
     {
-      dleveryId: 120,
-      quantity: 2,
-      name: "Chicken Sausage",
-      amount: "20.00",
-      paymentType: "Cash on Delivery",
-      status: "deliverd",
-    },
-
-    {
-      dleveryId: 465,
-      quantity: 2,
-      name: "Grilled Fish",
-      amount: "40.00",
-      paymentType: "Cash on Delivery",
-      status: "pending",
-    },
-    {
-      dleveryId: 247,
-      quantity: 1,
-      amount: "30.00",
-      name: "Veggie Pizza",
-      paymentType: "Credit Card",
-      status: "deliverd",
-    },
-    {
-      dleveryId: 245,
+      dleveryId: 285,
       quantity: 1,
       amount: "30.00",
       name: "Veggie Pizza",
@@ -92,116 +52,48 @@ const Deliveries = () => {
     },
 
     {
-      dleveryId: 344,
+      dleveryId: 365,
       quantity: 3,
       amount: "25.00",
       name: "Beef Burger",
       paymentType: "Mobile Payment",
-      status: "deliverd",
-    },
-    {
-      dleveryId: 122,
-      quantity: 2,
-      name: "Chicken Sausage",
-      amount: "20.00",
-      paymentType: "Cash on Delivery",
       status: "pending",
     },
     {
-      dleveryId: 485,
+      dleveryId: 443,
       quantity: 2,
       name: "Grilled Fish",
       amount: "40.00",
       paymentType: "Cash on Delivery",
-      status: "deliverd",
-    },
-    {
-      dleveryId: 526,
-      quantity: 1,
-      amount: "35.00",
-      name: "Chocolate Cupcake",
-      paymentType: "Credit Card",
-      status: "deliverd",
-    },
-    {
-      dleveryId: 321,
-      quantity: 3,
-      amount: "25.00",
-      name: "Beef Burger",
-      paymentType: "Mobile Payment",
       status: "pending",
-    },
-    {
-      dleveryId: 695,
-      quantity: 1,
-      amount: "55.00",
-      name: "Chocolate",
-      paymentType: "Credit Card",
-      status: "deliverd",
-    },
-    {
-      dleveryId: 741,
-      quantity: 1,
-      amount: "40.00",
-      name: "Choco",
-      paymentType: "Credit Card",
-      status: "deliverd",
     },
   ];
   const router = useRouter();
-
   return (
-    <View className="p-4 bg-primary">
-      <View className="flex flex-row justify-center w-full">
-        <Text className="text-2xl font-bold text-gray-500">Deliveries</Text>
+    <SafeAreaView style={{ padding: 20 }} className="flex-1 bg-primary">
+      <StatusBar backgroundColor="black" barStyle="white-content" />
+      <View className="flex flex-row items-center justify-between w-full ">
+        <TouchableOpacity
+          style={{
+            backgroundColor: themeColors.bgColor(1),
+          }}
+          onPress={() => {
+            router.push({
+              pathname: "/DashIndex",
+              params: { refresh: Date.now().toString() }, // unique param to force re-render
+            });
+          }}
+          className="z-10 p-2 rounded-full shadow-lg "
+        >
+          <Icon.ArrowLeft strokeWidth={3} stroke={"white"} />
+        </TouchableOpacity>
+        <Text className="text-2xl font-bold text-gray-500 ">Pending</Text>
       </View>
 
-      <View className="flex flex-row items-center justify-between gap-10 pt-6 ">
-        <View className="flex flex-row items-center h-full gap-3 ">
-          <Text
-            style={styles.font}
-            className="text-lg font-semibold text-gray-500"
-          >
-            Deliverd
-          </Text>
-          <TouchableOpacity
-            style={{ ...styles.shadow }}
-            onPress={() => DModalShow()}
-            className="flex items-center justify-center p-2 bg-white rounded-md"
-          >
-            <Icon.CheckCircle
-              stroke={themeColors.bgColor(1)}
-              strokeWidth={2.5}
-              height={18}
-              width={18}
-            />
-          </TouchableOpacity>
-        </View>
-        <View className="flex  flex-row items-center justify-center h-full gap-3 ">
-          <Text
-            style={[
-              { ...styles.font },
-              {
-                fontWeight: 600,
-              },
-            ]}
-            className="text-lg font-semibold text-gray-500"
-          >
-            Pending
-          </Text>
-          <TouchableOpacity
-            style={{ ...styles.shadow }}
-            onPress={() => PModalShow()}
-            className="flex items-center justify-center p-2 bg-white rounded-md"
-          >
-            <Icon.Clock stroke="red" strokeWidth={2.5} height={18} width={18} />
-          </TouchableOpacity>
-        </View>
-      </View>
-      <ScrollView style={{ height: 500 }} className="mt-4">
-        {delivered.length > 0 ? (
-          <View className="flex flex-col gap-4 ">
-            {delivered.map((item, index) => (
+      <ScrollView className="flex-1 mt-6 ">
+        {pending.length > 0 ? (
+          <View style={{ paddingVertical: 10 }} className="flex flex-col gap-4">
+            {pending.map((item, index) => (
               <TouchableOpacity
                 onPress={() => {
                   router.push({
@@ -209,7 +101,7 @@ const Deliveries = () => {
                   });
                 }}
                 key={index}
-                style={styles.shadow}
+                style={{ ...styles.shadow }}
                 className="flex flex-col  items-center mb-2 relative bg-white rounded-lg px-3 md:px-3 py-[1.5rem] "
               >
                 <View className="flex items-center w-full gap-2 ">
@@ -283,11 +175,11 @@ const Deliveries = () => {
           </View>
         )}
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
-export default Deliveries;
+export default Pending;
 
 const styles = StyleSheet.create({
   shadow: {
@@ -322,5 +214,6 @@ const styles = StyleSheet.create({
   font: {
     fontFamily: "Poppins_400Regular",
     // fontSize: 16,
+    color: "black",
   },
 });
